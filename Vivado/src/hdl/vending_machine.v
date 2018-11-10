@@ -17,8 +17,8 @@ module vending_machine(
     input wire dollar,
     input wire five,
     input wire cancelReset,
-    output wire gLEDA1,
-    output wire rLEDA1,
+    output wire gLEDA1, // green LED for A1 - means inserted $ >= A1 price
+    output wire rLEDA1, // red LED A1 - means A1 is OOS
     output wire gLEDA2,
     output wire rLEDA2,
     output wire gLEDA3,
@@ -35,9 +35,9 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
-    output wire [27:0] board7SD,
-    output wire [27:0] boardChange,
-    output wire boardChangeFive
+    output wire [27:0] board7SD,    // FPGA board 7 segment display (4 digits) - for prices and change in $
+    output wire [27:0] boardChange, // FPGA board 7 segment display (4 digits) - for coin return (dollar, quarter, dime, nickel)
+    output wire boardChangeFive // $5 change LED
     );
 
 reg priceA1;
@@ -57,12 +57,13 @@ end
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 
-    // 
+    // if $ has been inserted, user is selecting item
+    // if $ hasn't been inserted, user is checking the price of the item
 end
 
 always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five) begin
 
-    //
+    // add $ to total of money inserted
 end
 
 always @(posedge cancelReset) begin
