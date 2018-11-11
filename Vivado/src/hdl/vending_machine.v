@@ -35,20 +35,20 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
-    output wire [27:0] board7SD,    // FPGA board 7 segment display (4 digits) - for prices and change in $
-    output wire [27:0] boardChange, // FPGA board 7 segment display (4 digits) - for coin return (dollar, quarter, dime, nickel)
+    output wire [31:0] board7SD,    // FPGA board 7 segment display (4 digits) - for prices and change in $
+    output wire [31:0] boardChange, // FPGA board 7 segment display (4 digits) - for coin return (dollar, quarter, dime, nickel)
     output wire boardChangeFive // $5 change LED
     );
 
-reg priceA1;
-reg priceA2;
-reg priceA3;
-reg priceB1;
-reg priceB2;
-reg priceB3;
-reg priceC1;
-reg priceC2;
-reg priceC3;
+integer priceA1;
+integer priceA2;
+integer priceA3;
+integer priceB1;
+integer priceB2;
+integer priceB3;
+integer priceC1;
+integer priceC2;
+integer priceC3;
 
 always @(*) begin
 
