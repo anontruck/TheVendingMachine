@@ -50,7 +50,7 @@ integer priceC1;
 integer priceC2;
 integer priceC3;
 
-always @(*) begin
+always @(*) begin	// INCORRECT: this will run any time a variable changes; should maybe be initial ?
 
     // Assign random prices, light up red LED on any OOS items
 end
