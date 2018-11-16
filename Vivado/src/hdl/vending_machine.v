@@ -36,7 +36,6 @@ module vending_machine(
     output wire gLEDC3,
     output wire rLEDC3,
     output wire [31:0] board7SD,    // FPGA board 7 segment display (4 digits) - for prices and change in $
-    output wire [31:0] boardChange, // FPGA board 7 segment display (4 digits) - for coin return (dollar, quarter, dime, nickel)
     output wire boardChangeFive // $5 change LED
     );
 
@@ -52,15 +51,9 @@ integer priceC3;
 
 integer totalMoney;
 integer change;
-/*
-always @(*) begin	// INCORRECT: this will run any time a variable changes
 
-    // Assign random prices, light up red LED on any OOS items
-end
-*/
-
+// assign random prices, light up red LED on any OOS items
 // need function to print value on FPGA given number in integer (?) format
-
 // need function to return change in coins given change in integer (?) format
 
 always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
