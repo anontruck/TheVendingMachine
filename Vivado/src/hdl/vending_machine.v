@@ -50,26 +50,185 @@ integer priceC1;
 integer priceC2;
 integer priceC3;
 
-always @(*) begin	// INCORRECT: this will run any time a variable changes; should maybe be initial ?
+integer totalMoney;
+integer change;
+/*
+always @(*) begin	// INCORRECT: this will run any time a variable changes
 
     // Assign random prices, light up red LED on any OOS items
 end
+*/
 
-always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
+// need function to print value on FPGA given number in integer (?) format
 
-    // if $ has been inserted, user is selecting item
-    // if $ hasn't been inserted, user is checking the price of the item
+// need function to return change in coins given change in integer (?) format
+
+always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
+
+    if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+    
+            if (A1) begin
+            
+                // display priceA1 on FPGA
+                A1 = 0;
+            end
+            
+            else if (A2) begin
+                    
+                // display priceA2 on FPGA
+                A2 = 0;
+            end
+            
+            else if (A3) begin
+                            
+                // display priceA3 on FPGA
+                A3 = 0;
+            end
+            
+            else if (B1) begin
+                                    
+                // display priceB1 on FPGA
+                B1 = 0;
+            end
+            
+            else if (B2) begin
+                                            
+                // display priceB2 on FPGA
+                B2 = 0;
+            end
+            
+            else if (B3) begin
+                                                    
+                // display priceB3 on FPGA
+                B3 = 0;
+            end
+    
+            else if (C1) begin
+                                    
+                // display priceC1 on FPGA
+                C1 = 0;
+            end
+            
+            else if (C2) begin
+                                            
+                // display priceC2 on FPGA
+                C2 = 0;
+            end
+            
+            else if (C3) begin
+                                                    
+                // display priceC3 on FPGA
+                C3 = 0;
+            end
+    end
+    
+    else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
+
+        if (A1) begin
+        
+            // change = totalMoney - priceA1
+            // display change on FPGA
+        end
+        
+        else if (A2) begin
+                
+            // change = totalMoney - priceA2
+            // display change on FPGA
+        end
+        
+        else if (A3) begin
+                        
+            // change = totalMoney - priceA3
+            // display change on FPGA
+        end
+        
+        else if (B1) begin
+                                
+            // change = totalMoney - priceB1
+            // display change on FPGA
+        end
+        
+        else if (B2) begin
+                                        
+            // change = totalMoney - priceB2
+            // display change on FPGA
+        end
+        
+        else if (B3) begin
+                                                
+            // change = totalMoney - priceB3
+            // display change on FPGA
+        end
+
+        else if (C1) begin
+                                
+            // change = totalMoney - priceC1
+            // display change on FPGA
+        end
+        
+        else if (C2) begin
+                                        
+            // change = totalMoney - priceC2
+            // display change on FPGA
+        end
+        
+        else if (C3) begin
+                                                
+            // change = totalMoney - priceC3
+            // display change on FPGA
+        end
+        
+        // return change in coins
+    end
 end
 
-always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five) begin
+always @(nickel or dime or quarter or fifty or dollar or five) begin
 
-    // add $ to total of money inserted
+            if (nickel) begin
+            
+                // increase totalMoney by 5
+                nickel = 0;
+            end
+            
+            else if (dime) begin
+                    
+                // increase totalMoney by 10
+                dime = 0;
+            end
+            
+            else if (quarter) begin
+                            
+                // increase totalMoney by 25
+                quarter = 0;
+            end
+            
+            else if (fifty) begin
+                                    
+                // increase totalMoney by 50
+                fifty = 0;
+            end
+            
+            else if (dollar) begin
+                                            
+                // increase totalMoney by 100
+                dollar = 0;
+            end
+            
+            else if (five) begin
+                                                    
+                // increase totalMoney by 500
+                five = 0;
+            end
 end
 
-always @(posedge cancelReset) begin
+always @(cancelReset) begin
 
-    if (nickel || dime || quarter || fifty || dollar || five) begin
-        // return change
+    if (change > 0) begin
+
+        if (nickel || dime || quarter || fifty || dollar || five) begin
+
+            // return change
+        end
     end
     
     // reset values
