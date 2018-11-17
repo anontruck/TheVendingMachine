@@ -50,7 +50,28 @@ integer priceC2 = 0;
 integer priceC3 = 0;
 
 integer totalMoney = 0;
+integer maxMoney = 500;
 integer change = 0;
+
+assign gLEDA1 = (totalMoney >= priceA1) ? 1'b1 : 1'b0;
+assign gLEDA2 = (totalMoney >= priceA2) ? 1'b1 : 1'b0;
+assign gLEDA3 = (totalMoney >= priceA3) ? 1'b1 : 1'b0;
+assign gLEDB1 = (totalMoney >= priceB1) ? 1'b1 : 1'b0;
+assign gLEDB2 = (totalMoney >= priceB2) ? 1'b1 : 1'b0;
+assign gLEDB3 = (totalMoney >= priceB3) ? 1'b1 : 1'b0;
+assign gLEDC1 = (totalMoney >= priceC1) ? 1'b1 : 1'b0;
+assign gLEDC2 = (totalMoney >= priceC2) ? 1'b1 : 1'b0;
+assign gLEDC3 = (totalMoney >= priceC3) ? 1'b1 : 1'b0;
+
+assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;
+assign rLEDA2 = (priceA2 == 0) ? 1'b1 : 1'b0;
+assign rLEDA3 = (priceA3 == 0) ? 1'b1 : 1'b0;
+assign rLEDB1 = (priceB1 == 0) ? 1'b1 : 1'b0;
+assign rLEDB2 = (priceB2 == 0) ? 1'b1 : 1'b0;
+assign rLEDB3 = (priceB3 == 0) ? 1'b1 : 1'b0;
+assign rLEDC1 = (priceC1 == 0) ? 1'b1 : 1'b0;
+assign rLEDC2 = (priceC2 == 0) ? 1'b1 : 1'b0;
+assign rLEDC3 = (priceC3 == 0) ? 1'b1 : 1'b0;
 
 // assign random prices, light up red LED on any OOS items
 // need function to print value on FPGA given number in integer (?) format
@@ -110,54 +131,63 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
 
         if (A1) begin
         
+            // check if totalMoney >= priceA1
             change = totalMoney - priceA1;
             // display change on FPGA
         end
         
         else if (A2) begin
                 
+            // check if totalMoney >= priceA2
             change = totalMoney - priceA2;
             // display change on FPGA
         end
         
         else if (A3) begin
                         
+            // check if totalMoney >= priceA3
             change = totalMoney - priceA3;
             // display change on FPGA
         end
         
         else if (B1) begin
                                 
+            // check if totalMoney >= priceB1
             change = totalMoney - priceB1;
             // display change on FPGA
         end
         
         else if (B2) begin
                                         
+            // check if totalMoney >= priceB2
             change = totalMoney - priceB2;
             // display change on FPGA
         end
         
         else if (B3) begin
                                                 
+            // check if totalMoney >= priceB3
             change = totalMoney - priceB3;
             // display change on FPGA
         end
 
         else if (C1) begin
                                 
+            // check if totalMoney >= priceC1
             change = totalMoney - priceC1;
             // display change on FPGA
         end
         
         else if (C2) begin
                                         
+            // check if totalMoney >= priceC2
             change = totalMoney - priceC2;
             // display change on FPGA
         end
         
         else if (C3) begin
                                                 
+            // check if totalMoney >= priceC3
             change = totalMoney - priceC3;
             // display change on FPGA
         end
@@ -169,35 +199,83 @@ end
 
 always @(nickel or dime or quarter or fifty or dollar or five) begin
 
-            if (nickel) begin
+    if (nickel) begin
+    
+        if ((totalMoney + 5) > maxMoney) begin
             
-                totalMoney = totalMoney + 5;
-            end
+            // return nickel
+        end
+        
+        else begin
+        
+            totalMoney = totalMoney + 5;
+        end
+    end
             
-            else if (dime) begin
+    else if (dime) begin
 
-                totalMoney = totalMoney + 10;
-            end
+        if ((totalMoney + 10) > maxMoney) begin
+                
+            // return dime
+        end
+                
+        else begin
+                
+            totalMoney = totalMoney + 10;
+        end
+    end
             
-            else if (quarter) begin
+    else if (quarter) begin
 
-                totalMoney = totalMoney + 25;
-            end
+        if ((totalMoney + 25) > maxMoney) begin
+                
+            // return quarter
+        end
+                
+        else begin
+                
+            totalMoney = totalMoney + 25;
+        end
+    end
             
-            else if (fifty) begin
+    else if (fifty) begin
 
-                totalMoney = totalMoney + 50;
-            end
+        if ((totalMoney + 50) > maxMoney) begin
+                
+            // return fifty cent piece
+        end
+                
+        else begin
+                
+            totalMoney = totalMoney + 50;
+        end
+    end
             
-            else if (dollar) begin
+    else if (dollar) begin
 
-                totalMoney = totalMoney + 100;
-            end
+        if ((totalMoney + 100) > maxMoney) begin
+                
+            // return dollar
+        end
+                
+        else begin
+                
+            totalMoney = totalMoney + 100;
+        end
+    end
             
-            else if (five) begin
+    else if (five) begin
 
-                totalMoney = totalMoney + 500;
-            end
+        if ((totalMoney + 500) > maxMoney) begin
+                
+            // return five dollar bill
+        end
+                
+        else begin
+                
+            totalMoney = totalMoney + 500;
+        end
+    end
 end
 
 always @(cancelReset) begin
