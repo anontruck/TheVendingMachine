@@ -63,55 +63,46 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
             if (A1) begin
             
                 // display priceA1 on FPGA
-                //A1 = 0;
             end
             
             else if (A2) begin
                     
                 // display priceA2 on FPGA
-                //A2 = 0;
             end
             
             else if (A3) begin
                             
                 // display priceA3 on FPGA
-                //A3 = 0;
             end
             
             else if (B1) begin
                                     
                 // display priceB1 on FPGA
-                //B1 = 0;
             end
             
             else if (B2) begin
                                             
                 // display priceB2 on FPGA
-                //B2 = 0;
             end
             
             else if (B3) begin
                                                     
                 // display priceB3 on FPGA
-                //B3 = 0;
             end
     
             else if (C1) begin
                                     
                 // display priceC1 on FPGA
-                //C1 = 0;
             end
             
             else if (C2) begin
                                             
                 // display priceC2 on FPGA
-                //C2 = 0;
             end
             
             else if (C3) begin
                                                     
                 // display priceC3 on FPGA
-                //C3 = 0;
             end
     end
     
@@ -172,6 +163,7 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
         end
         
         // return change in coins
+        // reset
     end
 end
 
@@ -179,44 +171,32 @@ always @(nickel or dime or quarter or fifty or dollar or five) begin
 
             if (nickel) begin
             
-                // increase totalMoney by 5
                 totalMoney = totalMoney + 5;
-                //nickel = 0;
             end
             
             else if (dime) begin
-                    
-                // increase totalMoney by 10
+
                 totalMoney = totalMoney + 10;
-                //dime = 0;
             end
             
             else if (quarter) begin
-                            
-                // increase totalMoney by 25
+
                 totalMoney = totalMoney + 25;
-                //quarter = 0;
             end
             
             else if (fifty) begin
-                                    
-                // increase totalMoney by 50
+
                 totalMoney = totalMoney + 50;
-                //fifty = 0;
             end
             
             else if (dollar) begin
-                                            
-                // increase totalMoney by 100
+
                 totalMoney = totalMoney + 100;
-                //dollar = 0;
             end
             
             else if (five) begin
-                                                    
-                // increase totalMoney by 500
+
                 totalMoney = totalMoney + 500;
-                //five = 0;
             end
 end
 
@@ -224,13 +204,11 @@ always @(cancelReset) begin
 
     if (change > 0) begin
 
-        if (nickel || dime || quarter || fifty || dollar || five) begin
-
-            // return change
-        end
+        // return change in coins
+        change = 0;
     end
     
-    // reset values
+    // reset
 end
 
 endmodule
