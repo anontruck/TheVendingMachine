@@ -39,18 +39,18 @@ module vending_machine(
     output wire boardChangeFive // $5 change LED
     );
 
-integer priceA1;
-integer priceA2;
-integer priceA3;
-integer priceB1;
-integer priceB2;
-integer priceB3;
-integer priceC1;
-integer priceC2;
-integer priceC3;
+integer priceA1 = 0;
+integer priceA2 = 0;
+integer priceA3 = 0;
+integer priceB1 = 0;
+integer priceB2 = 0;
+integer priceB3 = 0;
+integer priceC1 = 0;
+integer priceC2 = 0;
+integer priceC3 = 0;
 
-integer totalMoney;
-integer change;
+integer totalMoney = 0;
+integer change = 0;
 
 // assign random prices, light up red LED on any OOS items
 // need function to print value on FPGA given number in integer (?) format
@@ -63,55 +63,55 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
             if (A1) begin
             
                 // display priceA1 on FPGA
-                A1 = 0;
+                //A1 = 0;
             end
             
             else if (A2) begin
                     
                 // display priceA2 on FPGA
-                A2 = 0;
+                //A2 = 0;
             end
             
             else if (A3) begin
                             
                 // display priceA3 on FPGA
-                A3 = 0;
+                //A3 = 0;
             end
             
             else if (B1) begin
                                     
                 // display priceB1 on FPGA
-                B1 = 0;
+                //B1 = 0;
             end
             
             else if (B2) begin
                                             
                 // display priceB2 on FPGA
-                B2 = 0;
+                //B2 = 0;
             end
             
             else if (B3) begin
                                                     
                 // display priceB3 on FPGA
-                B3 = 0;
+                //B3 = 0;
             end
     
             else if (C1) begin
                                     
                 // display priceC1 on FPGA
-                C1 = 0;
+                //C1 = 0;
             end
             
             else if (C2) begin
                                             
                 // display priceC2 on FPGA
-                C2 = 0;
+                //C2 = 0;
             end
             
             else if (C3) begin
                                                     
                 // display priceC3 on FPGA
-                C3 = 0;
+                //C3 = 0;
             end
     end
     
@@ -119,55 +119,55 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
 
         if (A1) begin
         
-            // change = totalMoney - priceA1
+            change = totalMoney - priceA1;
             // display change on FPGA
         end
         
         else if (A2) begin
                 
-            // change = totalMoney - priceA2
+            change = totalMoney - priceA2;
             // display change on FPGA
         end
         
         else if (A3) begin
                         
-            // change = totalMoney - priceA3
+            change = totalMoney - priceA3;
             // display change on FPGA
         end
         
         else if (B1) begin
                                 
-            // change = totalMoney - priceB1
+            change = totalMoney - priceB1;
             // display change on FPGA
         end
         
         else if (B2) begin
                                         
-            // change = totalMoney - priceB2
+            change = totalMoney - priceB2;
             // display change on FPGA
         end
         
         else if (B3) begin
                                                 
-            // change = totalMoney - priceB3
+            change = totalMoney - priceB3;
             // display change on FPGA
         end
 
         else if (C1) begin
                                 
-            // change = totalMoney - priceC1
+            change = totalMoney - priceC1;
             // display change on FPGA
         end
         
         else if (C2) begin
                                         
-            // change = totalMoney - priceC2
+            change = totalMoney - priceC2;
             // display change on FPGA
         end
         
         else if (C3) begin
                                                 
-            // change = totalMoney - priceC3
+            change = totalMoney - priceC3;
             // display change on FPGA
         end
         
@@ -180,37 +180,43 @@ always @(nickel or dime or quarter or fifty or dollar or five) begin
             if (nickel) begin
             
                 // increase totalMoney by 5
-                nickel = 0;
+                totalMoney = totalMoney + 5;
+                //nickel = 0;
             end
             
             else if (dime) begin
                     
                 // increase totalMoney by 10
-                dime = 0;
+                totalMoney = totalMoney + 10;
+                //dime = 0;
             end
             
             else if (quarter) begin
                             
                 // increase totalMoney by 25
-                quarter = 0;
+                totalMoney = totalMoney + 25;
+                //quarter = 0;
             end
             
             else if (fifty) begin
                                     
                 // increase totalMoney by 50
-                fifty = 0;
+                totalMoney = totalMoney + 50;
+                //fifty = 0;
             end
             
             else if (dollar) begin
                                             
                 // increase totalMoney by 100
-                dollar = 0;
+                totalMoney = totalMoney + 100;
+                //dollar = 0;
             end
             
             else if (five) begin
                                                     
                 // increase totalMoney by 500
-                five = 0;
+                totalMoney = totalMoney + 500;
+                //five = 0;
             end
 end
 
