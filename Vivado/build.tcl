@@ -66,6 +66,8 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 set obj [get_filesets sources_1]
 set files [list \
 "[file normalize "$origin_dir/src/hdl/vending_machine.v"]"\
+"[file normalize "$origin_dir/src/hdl/num_to_7SD.v"]"\
+"[file normalize "$origin_dir/src/hdl/num_to_coins.v"]"\
 ]
 add_files -norecurse -fileset $obj $files
 set obj [get_filesets sources_1]

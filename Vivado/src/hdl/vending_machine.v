@@ -38,31 +38,31 @@ module vending_machine(
     output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
     );
 
-reg [8:0] priceA1 = 0;  // 9 bits to hold up to binary 500, minus the sign bit
-reg [8:0] priceA2 = 0;
-reg [8:0] priceA3 = 0;
-reg [8:0] priceB1 = 0;
-reg [8:0] priceB2 = 0;
-reg [8:0] priceB3 = 0;
-reg [8:0] priceC1 = 0;
-reg [8:0] priceC2 = 0;
-reg [8:0] priceC3 = 0;
+reg [8:0] priceA1;  // 9 bits to hold up to binary 500, minus the sign bit
+reg [8:0] priceA2;
+reg [8:0] priceA3;
+reg [8:0] priceB1;
+reg [8:0] priceB2;
+reg [8:0] priceB3;
+reg [8:0] priceC1;
+reg [8:0] priceC2;
+reg [8:0] priceC3;
 
-reg [8:0] maxMoney = 500;
-reg [8:0] totalMoney = 0;
-reg [8:0] change = 0;
+reg [8:0] maxMoney;
+reg [8:0] totalMoney;
+reg [8:0] change;
 
-assign gLEDA1 = (totalMoney >= priceA1) ? 1'b1 : 1'b0;
-assign gLEDA2 = (totalMoney >= priceA2) ? 1'b1 : 1'b0;
-assign gLEDA3 = (totalMoney >= priceA3) ? 1'b1 : 1'b0;
-assign gLEDB1 = (totalMoney >= priceB1) ? 1'b1 : 1'b0;
-assign gLEDB2 = (totalMoney >= priceB2) ? 1'b1 : 1'b0;
-assign gLEDB3 = (totalMoney >= priceB3) ? 1'b1 : 1'b0;
-assign gLEDC1 = (totalMoney >= priceC1) ? 1'b1 : 1'b0;
-assign gLEDC2 = (totalMoney >= priceC2) ? 1'b1 : 1'b0;
-assign gLEDC3 = (totalMoney >= priceC3) ? 1'b1 : 1'b0;
+assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
+assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
+assign gLEDA3 = ((totalMoney >= priceA3) && (priceA3 != 0)) ? 1'b1 : 1'b0;
+assign gLEDB1 = ((totalMoney >= priceB1) && (priceB1 != 0)) ? 1'b1 : 1'b0;
+assign gLEDB2 = ((totalMoney >= priceB2) && (priceB2 != 0)) ? 1'b1 : 1'b0;
+assign gLEDB3 = ((totalMoney >= priceB3) && (priceB3 != 0)) ? 1'b1 : 1'b0;
+assign gLEDC1 = ((totalMoney >= priceC1) && (priceC1 != 0)) ? 1'b1 : 1'b0;
+assign gLEDC2 = ((totalMoney >= priceC2) && (priceC2 != 0)) ? 1'b1 : 1'b0;
+assign gLEDC3 = ((totalMoney >= priceC3) && (priceC3 != 0)) ? 1'b1 : 1'b0;
 
-assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;   // need to define OOS value; currently 0
+assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;   // need to OOS value = 0
 assign rLEDA2 = (priceA2 == 0) ? 1'b1 : 1'b0;
 assign rLEDA3 = (priceA3 == 0) ? 1'b1 : 1'b0;
 assign rLEDB1 = (priceB1 == 0) ? 1'b1 : 1'b0;
@@ -241,7 +241,7 @@ always @(nickel or dime or quarter or fifty or dollar or five) begin
 
         if ((totalMoney + 50) > maxMoney) begin
                 
-            // return fifty cent piece
+            // return 2 x quarters
         end
                 
         else begin
@@ -267,7 +267,7 @@ always @(nickel or dime or quarter or fifty or dollar or five) begin
 
         if ((totalMoney + 500) > maxMoney) begin
                 
-            // return five dollar bill
+            // return 5 x dollar bills
         end
                 
         else begin
