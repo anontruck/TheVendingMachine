@@ -35,23 +35,22 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
-    output wire [31:0] board7SD,    // FPGA board 7 segment display (4 digits) - for prices and change in $
-    output wire boardChangeFive // $5 change LED
+    output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
     );
 
-integer priceA1 = 0;
-integer priceA2 = 0;
-integer priceA3 = 0;
-integer priceB1 = 0;
-integer priceB2 = 0;
-integer priceB3 = 0;
-integer priceC1 = 0;
-integer priceC2 = 0;
-integer priceC3 = 0;
+reg [8:0] priceA1 = 0;  // 9 bits to hold up to binary 500, minus the sign bit
+reg [8:0] priceA2 = 0;
+reg [8:0] priceA3 = 0;
+reg [8:0] priceB1 = 0;
+reg [8:0] priceB2 = 0;
+reg [8:0] priceB3 = 0;
+reg [8:0] priceC1 = 0;
+reg [8:0] priceC2 = 0;
+reg [8:0] priceC3 = 0;
 
-integer totalMoney = 0;
-integer maxMoney = 500;
-integer change = 0;
+reg [8:0] maxMoney = 500;
+reg [8:0] totalMoney = 0;
+reg [8:0] change = 0;
 
 assign gLEDA1 = (totalMoney >= priceA1) ? 1'b1 : 1'b0;
 assign gLEDA2 = (totalMoney >= priceA2) ? 1'b1 : 1'b0;
@@ -63,7 +62,7 @@ assign gLEDC1 = (totalMoney >= priceC1) ? 1'b1 : 1'b0;
 assign gLEDC2 = (totalMoney >= priceC2) ? 1'b1 : 1'b0;
 assign gLEDC3 = (totalMoney >= priceC3) ? 1'b1 : 1'b0;
 
-assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;
+assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;   // need to define OOS value; currently 0
 assign rLEDA2 = (priceA2 == 0) ? 1'b1 : 1'b0;
 assign rLEDA3 = (priceA3 == 0) ? 1'b1 : 1'b0;
 assign rLEDB1 = (priceB1 == 0) ? 1'b1 : 1'b0;
