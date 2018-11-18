@@ -130,65 +130,128 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
 
         if (A1) begin
         
-            // check if totalMoney >= priceA1
-            change = totalMoney - priceA1;
-            // display change on FPGA
+            if (totalMoney >= priceA1) begin
+            
+                change = totalMoney - priceA1;
+                // display change on FPGA
+            end
+            
+            else begin
+            
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (A2) begin
                 
-            // check if totalMoney >= priceA2
-            change = totalMoney - priceA2;
-            // display change on FPGA
+            if (totalMoney >= priceA2) begin
+            
+                change = totalMoney - priceA2;
+                // display change on FPGA
+            end
+                    
+            else begin
+                    
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (A3) begin
                         
-            // check if totalMoney >= priceA3
-            change = totalMoney - priceA3;
-            // display change on FPGA
+            if (totalMoney >= priceA3) begin
+        
+                change = totalMoney - priceA3;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (B1) begin
                                 
-            // check if totalMoney >= priceB1
-            change = totalMoney - priceB1;
-            // display change on FPGA
+            if (totalMoney >= priceB1) begin
+        
+                change = totalMoney - priceB1;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (B2) begin
                                         
-            // check if totalMoney >= priceB2
-            change = totalMoney - priceB2;
-            // display change on FPGA
+            if (totalMoney >= priceB2) begin
+        
+                change = totalMoney - priceB2;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (B3) begin
                                                 
-            // check if totalMoney >= priceB3
-            change = totalMoney - priceB3;
-            // display change on FPGA
+            if (totalMoney >= priceB3) begin
+        
+                change = totalMoney - priceB3;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
 
         else if (C1) begin
                                 
-            // check if totalMoney >= priceC1
-            change = totalMoney - priceC1;
-            // display change on FPGA
+            if (totalMoney >= priceC1) begin
+        
+                change = totalMoney - priceC1;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (C2) begin
                                         
-            // check if totalMoney >= priceC2
-            change = totalMoney - priceC2;
-            // display change on FPGA
+            if (totalMoney >= priceC2) begin
+        
+                change = totalMoney - priceC2;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         else if (C3) begin
                                                 
-            // check if totalMoney >= priceC3
-            change = totalMoney - priceC3;
-            // display change on FPGA
+            if (totalMoney >= priceC3) begin
+        
+                change = totalMoney - priceC3;
+                // display change on FPGA
+            end
+        
+            else begin
+        
+                // ? What to do if user selects an item without enough money inserted?
+            end
         end
         
         // return change in coins
@@ -285,7 +348,7 @@ always @(cancelReset) begin
         change = 0;
     end
     
-    // reset
+    totalMoney = 0;
 end
 
 endmodule
