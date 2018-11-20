@@ -53,8 +53,10 @@ reg [8:0] maxMoney;
 reg [8:0] totalMoney;
 reg [8:0] change;
 
-wire [31:0] display;
+reg [31:0] display;
 assign board7SD = display;
+
+reg [31:0] tempDisp;    // to hold 7SD value when pressing coinsDisplay
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -84,47 +86,47 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if (A1) begin
             
-                // display priceA1 on FPGA
+                // display priceA1 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (A2) begin
                     
-                // display priceA2 on FPGA
+                // display priceA2 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (A3) begin
                             
-                // display priceA3 on FPGA
+                // display priceA3 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (B1) begin
                                     
-                // display priceB1 on FPGA
+                // display priceB1 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (B2) begin
                                             
-                // display priceB2 on FPGA
+                // display priceB2 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (B3) begin
                                                     
-                // display priceB3 on FPGA
+                // display priceB3 on FPGA; num_to_7SD.v, decimal = 1
             end
     
             else if (C1) begin
                                     
-                // display priceC1 on FPGA
+                // display priceC1 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (C2) begin
                                             
-                // display priceC2 on FPGA
+                // display priceC2 on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else if (C3) begin
                                                     
-                // display priceC3 on FPGA
+                // display priceC3 on FPGA; num_to_7SD.v, decimal = 1
             end
     end
     
@@ -135,7 +137,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceA1) begin
             
                 change = totalMoney - priceA1;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
             
             else begin
@@ -149,7 +151,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceA2) begin
             
                 change = totalMoney - priceA2;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
                     
             else begin
@@ -163,7 +165,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceA3) begin
         
                 change = totalMoney - priceA3;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -177,7 +179,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceB1) begin
         
                 change = totalMoney - priceB1;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -191,7 +193,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceB2) begin
         
                 change = totalMoney - priceB2;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -205,7 +207,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceB3) begin
         
                 change = totalMoney - priceB3;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -219,7 +221,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceC1) begin
         
                 change = totalMoney - priceC1;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -233,7 +235,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceC2) begin
         
                 change = totalMoney - priceC2;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -247,7 +249,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceC3) begin
         
                 change = totalMoney - priceC3;
-                // display change on FPGA
+                // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
             else begin
@@ -256,7 +258,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             end
         end
         
-        // return change in coins
+        // return change in coins; num_to_coins.v -> num_to_7SD.v
         // reset
     end
 end
@@ -267,7 +269,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
     
         if ((totalMoney + 5) > maxMoney) begin
             
-            // return nickel
+            // return nickel; num_to_coins.v -> num_to_7SD.v
         end
         
         else begin
@@ -280,7 +282,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 10) > maxMoney) begin
                 
-            // return dime
+            // return dime; num_to_coins.v -> num_to_7SD.v
         end
                 
         else begin
@@ -293,7 +295,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 25) > maxMoney) begin
                 
-            // return quarter
+            // return quarter; num_to_coins.v -> num_to_7SD.v
         end
                 
         else begin
@@ -306,7 +308,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 50) > maxMoney) begin
                 
-            // return 2 x quarters
+            // return 2 x quarters; num_to_coins.v -> num_to_7SD.v
         end
                 
         else begin
@@ -319,7 +321,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 100) > maxMoney) begin
                 
-            // return dollar
+            // return dollar; num_to_coins.v -> num_to_7SD.v
         end
                 
         else begin
@@ -332,7 +334,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 500) > maxMoney) begin
                 
-            // return 5 x dollar bills
+            // return 5 x dollar bills; num_to_coins.v -> num_to_7SD.v
         end
                 
         else begin
@@ -342,15 +344,27 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
     end
 end
 
-always @(cancelReset) begin
+always @(posedge cancelReset) begin
 
     if (change > 0) begin
 
-        // return change in coins
+        // return change in coins; num_to_coins.v -> num_to_7SD.v
         change = 0;
     end
     
     totalMoney = 0;
+end
+
+always @(posedge coinsDisplay) begin
+
+    tempDisp = display;
+    // show change in coins on FPGA; num_to_coins.v -> num_to_7SD.v
+end
+
+always @(negedge coinsDisplay) begin
+
+    display = tempDisp;
+    // might need some debounce code
 end
 
 endmodule
