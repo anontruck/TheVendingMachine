@@ -35,22 +35,26 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
+    output wire coinsDisplay,
     output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
     );
 
-reg [8:0] priceA1;  // 9 bits to hold up to binary 500, minus the sign bit
-reg [8:0] priceA2;
-reg [8:0] priceA3;
-reg [8:0] priceB1;
-reg [8:0] priceB2;
-reg [8:0] priceB3;
-reg [8:0] priceC1;
-reg [8:0] priceC2;
-reg [8:0] priceC3;
+reg [8:0] priceA1 = 100;    // 9 bits to hold up to binary 500, minus the sign bit
+reg [8:0] priceA2 = 0;      // might not be proper assignment here (outside always block)
+reg [8:0] priceA3 = 125;
+reg [8:0] priceB1 = 175;
+reg [8:0] priceB2 = 225;
+reg [8:0] priceB3 = 250;
+reg [8:0] priceC1 = 100;
+reg [8:0] priceC2 = 325;
+reg [8:0] priceC3 = 371;
 
 reg [8:0] maxMoney;
 reg [8:0] totalMoney;
 reg [8:0] change;
+
+wire [31:0] display;
+assign board7SD = display;
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -72,9 +76,7 @@ assign rLEDC1 = (priceC1 == 0) ? 1'b1 : 1'b0;
 assign rLEDC2 = (priceC2 == 0) ? 1'b1 : 1'b0;
 assign rLEDC3 = (priceC3 == 0) ? 1'b1 : 1'b0;
 
-// assign random prices, light up red LED on any OOS items
-// need function to print value on FPGA given number in integer (?) format
-// need function to return change in coins given change in integer (?) format
+// assign random prices
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 

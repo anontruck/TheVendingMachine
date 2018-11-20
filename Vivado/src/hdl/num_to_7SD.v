@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module num_to_7SD(
-    input wire [13:0] decNum, 
+    input wire [13:0] intNum, 
     input wire decimal,
     output wire [31:0] sevenSeg
     );
@@ -19,7 +19,7 @@ assign sevenSeg = display;
 
 always @(*) begin
 
-    number = decNum;
+    number = intNum;
     thousands = number / 1000;
     hundreds = (number - (thousands * 1000)) / 100;
     tens = (number - (thousands * 1000) - (hundreds * 100)) / 10;
