@@ -76,7 +76,7 @@ assign rLEDC3 = (priceC3 == 0) ? 1'b1 : 1'b0;
 // need function to print value on FPGA given number in integer (?) format
 // need function to return change in coins given change in integer (?) format
 
-always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
+always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 
     if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
     
@@ -259,7 +259,7 @@ always @(A1 or A2 or A3 or B1 or B2 or B3 or C1 or C2 or C3) begin
     end
 end
 
-always @(nickel or dime or quarter or fifty or dollar or five) begin
+always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five) begin
 
     if (nickel) begin
     

@@ -17,16 +17,13 @@ assign value = coins;
 always @(*) begin
 
     number = decNum;
+    
     dollars = number / 100;
     quarters = (number - (dollars * 100)) / 25;
     dimes = (number - (dollars * 100) - (quarters * 25)) / 10;
     nickels = (number - (dollars * 100) - (quarters * 25) - (dimes * 10)) / 5;
     
-    coins = 0;
-    coins = coins + (dollars * 1000);
-    coins = coins + (quarters * 100);
-    coins = coins + (dimes * 10);
-    coins = coins + nickels;
+    coins = (dollars * 1000) + (quarters * 100) + (dimes * 10) + nickels;
 end
 
 endmodule

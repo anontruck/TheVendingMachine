@@ -25,67 +25,67 @@ always @(*) begin
     tens = (number - (thousands * 1000) - (hundreds * 100)) / 10;
     ones = (number - (thousands * 1000) - (hundreds * 100) - (tens * 10));
     
-    case(ones)  // gfedcba
-        4'b0000 : sseg = 8'b10000001;   // 0
-        4'b0001 : sseg = 8'b11110011;   // 1
-        4'b0010 : sseg = 8'b01001001;   // 2
-        4'b0011 : sseg = 8'b01100001;   // 3
-        4'b0100 : sseg = 8'b00110011;   // 4
-        4'b0101 : sseg = 8'b00100101;   // 5
-        4'b0110 : sseg = 8'b00000101;   // 6
-        4'b0111 : sseg = 8'b11110001;   // 7
-        4'b1000 : sseg = 8'b00000001;   // 8
-        4'b1001 : sseg = 8'b00100001;   // 9
+    case(thousands)  // gfedcba
+        0 : sseg = 8'b10000001;   // 0
+        1 : sseg = 8'b11110011;   // 1
+        2 : sseg = 8'b01001001;   // 2
+        3 : sseg = 8'b01100001;   // 3
+        4 : sseg = 8'b00110011;   // 4
+        5 : sseg = 8'b00100101;   // 5
+        6 : sseg = 8'b00000101;   // 6
+        7 : sseg = 8'b11110001;   // 7
+        8 : sseg = 8'b00000001;   // 8
+        9 : sseg = 8'b00100001;   // 9
     endcase
     
-    display = {display, sseg};
-       
-    case(tens)  // gfedcba
-        4'b0000 : sseg = 8'b10000001;   // 0
-        4'b0001 : sseg = 8'b11110011;   // 1
-        4'b0010 : sseg = 8'b01001001;   // 2
-        4'b0011 : sseg = 8'b01100001;   // 3
-        4'b0100 : sseg = 8'b00110011;   // 4
-        4'b0101 : sseg = 8'b00100101;   // 5
-        4'b0110 : sseg = 8'b00000101;   // 6
-        4'b0111 : sseg = 8'b11110001;   // 7
-        4'b1000 : sseg = 8'b00000001;   // 8
-        4'b1001 : sseg = 8'b00100001;   // 9
-    endcase
-
     display = {display, sseg};
        
     case(hundreds)  // gfedcba
-        4'b0000 : sseg = 8'b10000001;   // 0
-        4'b0001 : sseg = 8'b11110011;   // 1
-        4'b0010 : sseg = 8'b01001001;   // 2
-        4'b0011 : sseg = 8'b01100001;   // 3
-        4'b0100 : sseg = 8'b00110011;   // 4
-        4'b0101 : sseg = 8'b00100101;   // 5
-        4'b0110 : sseg = 8'b00000101;   // 6
-        4'b0111 : sseg = 8'b11110001;   // 7
-        4'b1000 : sseg = 8'b00000001;   // 8
-        4'b1001 : sseg = 8'b00100001;   // 9
+        0 : sseg = 8'b10000001;   // 0
+        1 : sseg = 8'b11110011;   // 1
+        2 : sseg = 8'b01001001;   // 2
+        3 : sseg = 8'b01100001;   // 3
+        4 : sseg = 8'b00110011;   // 4
+        5 : sseg = 8'b00100101;   // 5
+        6 : sseg = 8'b00000101;   // 6
+        7 : sseg = 8'b11110001;   // 7
+        8 : sseg = 8'b00000001;   // 8
+        9 : sseg = 8'b00100001;   // 9
     endcase
-    
-    if (decimal == 1) begin
+
+    if (decimal) begin
     
         sseg[0] = 1'b0;
     end
+
+    display = {display, sseg};
+       
+    case(tens)  // gfedcba
+        0 : sseg = 8'b10000001;   // 0
+        1 : sseg = 8'b11110011;   // 1
+        2 : sseg = 8'b01001001;   // 2
+        3 : sseg = 8'b01100001;   // 3
+        4 : sseg = 8'b00110011;   // 4
+        5 : sseg = 8'b00100101;   // 5
+        6 : sseg = 8'b00000101;   // 6
+        7 : sseg = 8'b11110001;   // 7
+        8 : sseg = 8'b00000001;   // 8
+        9 : sseg = 8'b00100001;   // 9
+    endcase
     
     display = {display, sseg};
     
-    case(thousands)  // gfedcba
-        4'b0000 : sseg = 8'b10000001;   // 0
-        4'b0001 : sseg = 8'b11110011;   // 1
-        4'b0010 : sseg = 8'b01001001;   // 2
-        4'b0011 : sseg = 8'b01100001;   // 3
-        4'b0100 : sseg = 8'b00110011;   // 4
-        4'b0101 : sseg = 8'b00100101;   // 5
-        4'b0110 : sseg = 8'b00000101;   // 6
-        4'b0111 : sseg = 8'b11110001;   // 7
-        4'b1000 : sseg = 8'b00000001;   // 8
-        4'b1001 : sseg = 8'b00100001;   // 9
+    case(ones)  // gfedcba
+        0 : sseg = 8'b10000001;   // 0
+        1 : sseg = 8'b11110011;   // 1
+        2 : sseg = 8'b01001001;   // 2
+        3 : sseg = 8'b01100001;   // 3
+        4 : sseg = 8'b00110011;   // 4
+        5 : sseg = 8'b00100101;   // 5
+        6 : sseg = 8'b00000101;   // 6
+        7 : sseg = 8'b11110001;   // 7
+        8 : sseg = 8'b00000001;   // 8
+        9 : sseg = 8'b00100001;   // 9
     endcase
     
     display = {display, sseg};
