@@ -56,6 +56,7 @@ reg [8:0] change;
 reg [31:0] display;
 assign board7SD = display;
 
+reg [13:0] tempInt;     // to hold value before sending to num_to_7SD
 reg [31:0] tempDisp;    // to hold 7SD value when pressing coinsDisplay
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
@@ -87,47 +88,58 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (A1) begin
             
                 // display priceA1 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceA1;
             end
             
             else if (A2) begin
                     
                 // display priceA2 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceA2;
             end
             
             else if (A3) begin
                             
                 // display priceA3 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceA3;
             end
             
             else if (B1) begin
                                     
                 // display priceB1 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceB1;
             end
             
             else if (B2) begin
                                             
                 // display priceB2 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceB2;
             end
             
             else if (B3) begin
                                                     
                 // display priceB3 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceB3;
             end
     
             else if (C1) begin
                                     
                 // display priceC1 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceC1;
             end
             
             else if (C2) begin
                                             
                 // display priceC2 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceC2;
             end
             
             else if (C3) begin
                                                     
                 // display priceC3 on FPGA; num_to_7SD.v, decimal = 1
+                tempInt = priceC3;
             end
+            
+            //num_to_7SD name (tempInt, 1, display);
     end
     
     else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
