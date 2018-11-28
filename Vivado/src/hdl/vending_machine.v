@@ -59,6 +59,12 @@ assign board7SD = display;
 reg [13:0] tempInt;     // to hold value before sending to num_to_7SD
 reg [31:0] tempDisp;    // to hold 7SD value when pressing coinsDisplay
 
+// temporary registers for submodules
+reg [13:0] int; // holds integer value to print (change or coins)
+reg decimal;    // 1 or 0 depending on if a decimal should be shown in num_to_7SD
+
+reg [13:0] coins;   // integer value showing each coin amount
+
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA3 = ((totalMoney >= priceA3) && (priceA3 != 0)) ? 1'b1 : 1'b0;
@@ -79,7 +85,8 @@ assign rLEDC1 = (priceC1 == 0) ? 1'b1 : 1'b0;
 assign rLEDC2 = (priceC2 == 0) ? 1'b1 : 1'b0;
 assign rLEDC3 = (priceC3 == 0) ? 1'b1 : 1'b0;
 
-// assign random prices
+num_to_7SD toDisp(.intNum(int), .decimal(decimal), .sevenSeg(board7SD));
+num_to_coins toCoint(.intNum(), .value(coins));
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 
