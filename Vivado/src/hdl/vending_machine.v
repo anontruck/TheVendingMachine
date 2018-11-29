@@ -35,35 +35,9 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
-    output wire coinsDisplay,
+    output wire coinsDisplay,	// button to show current change in coins
     output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
     );
-
-reg [8:0] priceA1 = 100;    // 9 bits to hold up to binary 500, minus the sign bit
-reg [8:0] priceA2 = 0;      // might not be proper assignment here (outside always block)
-reg [8:0] priceA3 = 125;
-reg [8:0] priceB1 = 175;
-reg [8:0] priceB2 = 225;
-reg [8:0] priceB3 = 250;
-reg [8:0] priceC1 = 100;
-reg [8:0] priceC2 = 325;
-reg [8:0] priceC3 = 371;
-
-reg [8:0] maxMoney;
-reg [8:0] totalMoney;
-reg [8:0] change;
-
-reg [31:0] display;
-assign board7SD = display;
-
-reg [13:0] tempInt;     // to hold value before sending to num_to_7SD
-reg [31:0] tempDisp;    // to hold 7SD value when pressing coinsDisplay
-
-// temporary registers for submodules
-reg [13:0] int; // holds integer value to print (change or coins)
-reg decimal;    // 1 or 0 depending on if a decimal should be shown in num_to_7SD
-
-reg [13:0] coins;   // integer value showing each coin amount
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -85,77 +59,106 @@ assign rLEDC1 = (priceC1 == 0) ? 1'b1 : 1'b0;
 assign rLEDC2 = (priceC2 == 0) ? 1'b1 : 1'b0;
 assign rLEDC3 = (priceC3 == 0) ? 1'b1 : 1'b0;
 
-num_to_7SD toDisp(.intNum(int), .decimal(decimal), .sevenSeg(board7SD));
-num_to_coins toCoint(.intNum(), .value(coins));
+reg [31:0] display;
+assign board7SD = display;
+
+reg [8:0] priceA1 = 100;    // 9 bits to hold up to binary 500, minus the sign bit
+reg [8:0] priceA2 = 0;      // might not be proper assignment here (outside always block)
+reg [8:0] priceA3 = 125;
+reg [8:0] priceB1 = 175;
+reg [8:0] priceB2 = 225;
+reg [8:0] priceB3 = 250;
+reg [8:0] priceC1 = 100;
+reg [8:0] priceC2 = 325;
+reg [8:0] priceC3 = 375;
+
+reg [8:0] maxMoney;
+reg [8:0] totalMoney;
+reg [8:0] change;
+
+// temporary register for coinsDisplay
+reg [31:0] tempDisp;    // to hold 7SD value when pressing coinsDisplay
+
+// temporary registers for submodules
+reg [13:0] int; // holds integer value to print (change or coins)
+reg decimal;    // 1 or 0 depending on if a decimal should be shown in num_to_7SD
+
+reg [13:0] coins;   // integer value showing each coin amount
+
+num_to_7SD toDisp(.intNum(int), .decimal(decimal), .sevenSeg(display));
+num_to_coins toCoins(.intNum(int), .value(coins));
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 
     if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+
+            decimal = 1;
     
             if (A1) begin
             
                 // display priceA1 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceA1;
+                int = priceA1;
             end
             
             else if (A2) begin
                     
                 // display priceA2 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceA2;
+                int = priceA2;
             end
             
             else if (A3) begin
                             
                 // display priceA3 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceA3;
+                int = priceA3;
             end
             
             else if (B1) begin
                                     
                 // display priceB1 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceB1;
+                int = priceB1;
             end
             
             else if (B2) begin
                                             
                 // display priceB2 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceB2;
+                int = priceB2;
             end
             
             else if (B3) begin
                                                     
                 // display priceB3 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceB3;
+                int = priceB3;
             end
     
             else if (C1) begin
                                     
                 // display priceC1 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceC1;
+                int = priceC1;
             end
             
             else if (C2) begin
                                             
                 // display priceC2 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceC2;
+                int = priceC2;
             end
             
             else if (C3) begin
                                                     
                 // display priceC3 on FPGA; num_to_7SD.v, decimal = 1
-                tempInt = priceC3;
+                int = priceC3;
             end
-            
-            //num_to_7SD name (tempInt, 1, display);
     end
     
     else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
+
+        decimal = 1;
 
         if (A1) begin
         
             if (totalMoney >= priceA1) begin
             
                 change = totalMoney - priceA1;
+		int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
             
@@ -170,6 +173,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceA2) begin
             
                 change = totalMoney - priceA2;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
                     
@@ -184,6 +188,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceA3) begin
         
                 change = totalMoney - priceA3;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
@@ -198,6 +203,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceB1) begin
         
                 change = totalMoney - priceB1;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
@@ -212,6 +218,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceB2) begin
         
                 change = totalMoney - priceB2;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
@@ -226,6 +233,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceB3) begin
         
                 change = totalMoney - priceB3;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
@@ -240,6 +248,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceC1) begin
         
                 change = totalMoney - priceC1;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
@@ -254,6 +263,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceC2) begin
         
                 change = totalMoney - priceC2;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
@@ -268,6 +278,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             if (totalMoney >= priceC3) begin
         
                 change = totalMoney - priceC3;
+                int = change;
                 // display change on FPGA; num_to_7SD.v, decimal = 1
             end
         
