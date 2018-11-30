@@ -5,7 +5,7 @@ module num_to_coins(
     output wire [13:0] value
     );
 
-reg [13:0] number;
+reg [8:0] number;
 reg [3:0] dollars;
 reg [3:0] quarters;
 reg [3:0] dimes;

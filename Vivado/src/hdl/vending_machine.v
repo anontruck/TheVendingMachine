@@ -35,9 +35,27 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
-    output wire coinsDisplay,	// button to show current change in coins
+    output wire coinsDisp,  // button to show current change in coins
     output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
     );
+
+reg [31:0] display;
+assign board7SD = display;
+
+reg [8:0] priceA1 = 100;    // 9 bits to hold up to binary 500, minus the sign bit
+reg [8:0] priceA2 = 0;      // might not be proper assignment here (outside always block)
+reg [8:0] priceA3 = 125;
+reg [8:0] priceB1 = 175;
+reg [8:0] priceB2 = 225;
+reg [8:0] priceB3 = 250;
+reg [8:0] priceC1 = 100;
+reg [8:0] priceC2 = 325;
+reg [8:0] priceC3 = 375;
+
+reg [8:0] maxMoney;
+reg [8:0] totalMoney;
+reg [8:0] change;
+reg [8:0] coins;   // integer value showing each coin amount
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -59,32 +77,16 @@ assign rLEDC1 = (priceC1 == 0) ? 1'b1 : 1'b0;
 assign rLEDC2 = (priceC2 == 0) ? 1'b1 : 1'b0;
 assign rLEDC3 = (priceC3 == 0) ? 1'b1 : 1'b0;
 
-reg [31:0] display;
-assign board7SD = display;
-
-reg [8:0] priceA1 = 100;    // 9 bits to hold up to binary 500, minus the sign bit
-reg [8:0] priceA2 = 0;      // might not be proper assignment here (outside always block)
-reg [8:0] priceA3 = 125;
-reg [8:0] priceB1 = 175;
-reg [8:0] priceB2 = 225;
-reg [8:0] priceB3 = 250;
-reg [8:0] priceC1 = 100;
-reg [8:0] priceC2 = 325;
-reg [8:0] priceC3 = 375;
-
-reg [8:0] maxMoney;
-reg [8:0] totalMoney;
-reg [8:0] change;
-reg [13:0] coins;   // integer value showing each coin amount
-
-reg [31:0] tempDisp;    // to hold 7SD value when pressing coinsDisplay
-
-num_to_7SD toDisp(.intNum(int), .decimal(decimal), .sevenSeg(display));
-num_to_coins toCoins(.intNum(int), .value(coins));
+reg [31:0] coinsDispTmp;    // to hold 7SD value when pressing coinsDisp
 
 // temporary registers for instantiated modules
-reg [13:0] int; // holds integer value to print (change or coins)
+reg [13:0] num; // holds integer value to print (change or coins)
 reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
+reg [31:0] tmpDisp; // holder for output before printing (num_to_7SD)
+reg [8:0] tmpCoins; // holder for change in coins (num_to_coins)
+
+num_to_7SD toDisp(.intNum(num), .decimal(decimal), .sevenSeg(tmpDisp));
+num_to_coins toCoins(.intNum(num), .value(tmpCoins));
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 
@@ -94,56 +96,47 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if (A1) begin
             
-                // display priceA1 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceA1;
+                num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
             end
             
             else if (A2) begin
                     
-                // display priceA2 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceA2;
+                num = priceA2;
             end
             
             else if (A3) begin
                             
-                // display priceA3 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceA3;
+                num = priceA3;
             end
             
             else if (B1) begin
                                     
-                // display priceB1 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceB1;
+                num = priceB1;
             end
             
             else if (B2) begin
                                             
-                // display priceB2 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceB2;
+                num = priceB2;
             end
             
             else if (B3) begin
                                                     
-                // display priceB3 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceB3;
+                num = priceB3;
             end
     
             else if (C1) begin
                                     
-                // display priceC1 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceC1;
+                num = priceC1;
             end
             
             else if (C2) begin
                                             
-                // display priceC2 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceC2;
+                num = priceC2;
             end
             
             else if (C3) begin
                                                     
-                // display priceC3 on FPGA; num_to_7SD.v, decimal = 1
-                int = priceC3;
+                num = priceC3;
             end
     end
     
@@ -155,14 +148,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
             if (totalMoney >= priceA1) begin
             
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceA1;
-		int = change;
+                num = change;   // loads tmpDisp with change; will print when display = tmpDisp
             end
             
             else begin
             
-                // ? What to do if user selects an item without enough money inserted?
+                // what to do if user selects an item without enough money inserted?
             end
         end
         
@@ -170,14 +162,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                 
             if (totalMoney >= priceA2) begin
             
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceA2;
-                int = change;
+                num = change;
             end
                     
             else begin
                     
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
         
@@ -185,14 +176,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                         
             if (totalMoney >= priceA3) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceA3;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
         
@@ -200,14 +190,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                                 
             if (totalMoney >= priceB1) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceB1;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
         
@@ -215,14 +204,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                                         
             if (totalMoney >= priceB2) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceB2;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
         
@@ -230,14 +218,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                                                 
             if (totalMoney >= priceB3) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceB3;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
 
@@ -245,14 +232,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                                 
             if (totalMoney >= priceC1) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceC1;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
         
@@ -260,14 +246,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                                         
             if (totalMoney >= priceC2) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceC2;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
         
@@ -275,20 +260,20 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                                                 
             if (totalMoney >= priceC3) begin
         
-                // display change on FPGA; num_to_7SD.v, decimal = 1
                 change = totalMoney - priceC3;
-                int = change;
+                num = change;
             end
         
             else begin
         
-                // ? What to do if user selects an item without enough money inserted?
+                //
             end
         end
-        
-        // return change in coins; num_to_coins.v -> num_to_7SD.v
+
         totalMoney = 0;
     end
+    
+    display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
 end
 
 always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five) begin
@@ -299,7 +284,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
     
         if ((totalMoney + 5) > maxMoney) begin
             
-            // return nickel; num_to_coins.v -> num_to_7SD.v
+            num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
         end
         
         else begin
@@ -312,7 +297,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 10) > maxMoney) begin
                 
-            // return dime; num_to_coins.v -> num_to_7SD.v
+            num = 10;
         end
                 
         else begin
@@ -325,7 +310,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 25) > maxMoney) begin
                 
-            // return quarter; num_to_coins.v -> num_to_7SD.v
+            num = 25;
         end
                 
         else begin
@@ -338,7 +323,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 50) > maxMoney) begin
                 
-            // return 2 x quarters; num_to_coins.v -> num_to_7SD.v
+            num = 50;
         end
                 
         else begin
@@ -351,7 +336,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 100) > maxMoney) begin
                 
-            // return dollar; num_to_coins.v -> num_to_7SD.v
+            num = 100;
         end
                 
         else begin
@@ -364,7 +349,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
 
         if ((totalMoney + 500) > maxMoney) begin
                 
-            // return 5 x dollar bills; num_to_coins.v -> num_to_7SD.v
+            num = 500;
         end
                 
         else begin
@@ -372,30 +357,37 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
             totalMoney = totalMoney + 500;
         end
     end
+    
+    coins = coins + tmpCoins;   // adds overflow change to total change in coins; will display when display = coins
 end
 
 always @(posedge cancelReset) begin
 
+    decimal = 1;
+
     if (change > 0) begin
 
-        // return change in coins; num_to_coins.v -> num_to_7SD.v
+        num = change;   // loads tmpDisp with change in 7SD decimal format
     end
     
     totalMoney = 0;
+    change = 0;
+    coins = 0;
+    display = tmpDisp;  // print change on 7SD
 end
 
-always @(posedge coinsDisplay) begin
+always @(posedge coinsDisp) begin
 
     decimal = 0;
 
-    tempDisp = display;
-    // show change in coins on FPGA; num_to_coins.v -> num_to_7SD.v
+    coinsDispTmp = display; // save current 7SD to restore on negedge button press
+    num = tmpCoins; // loads tmpDisp with change in coins converted to 7SD format
+    display = tmpDisp;  // displays change in coins in 7SD format
 end
 
-always @(negedge coinsDisplay) begin
+always @(negedge coinsDisp) begin
 
-    display = tempDisp;
-    // might need some debounce code
+    display = coinsDispTmp; // restore previously saved 7SD value
 end
 
 endmodule
