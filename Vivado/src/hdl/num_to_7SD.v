@@ -42,7 +42,6 @@ always @(*) begin
     if (negative) begin
     
         sseg = 8'b01111111;
-        $display("DEBUG (num_to_7SD), *negative*");
     end
     
     display = {display, sseg};
@@ -107,7 +106,6 @@ always @(*) begin
     
         if (negative) begin
         
-            $display("DEBUG: (num_to_7SD), *negative*");
             $display("DEBUG: (num_to_7SD), display = -%0d.%0d%0d", hundreds, tens, ones);
         end
         

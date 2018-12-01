@@ -64,7 +64,7 @@ reg [8:0] priceC3 = 375;
 reg [8:0] maxMoney = 500;
 reg [8:0] totalMoney = 0;
 reg [8:0] change;
-reg [8:0] coins;   // integer value showing each coin amount
+//reg [8:0] coins;   // integer value showing each coin amount
 
 reg [7:0] select = 8'hx;    // selected item code (A1, A2, A3, etc.)
 
@@ -311,10 +311,9 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
 
         totalMoney = 0;
         change = 0;
-        coins = 0;
+        //coins = 0;
     end
-    
-    #1; // DEBUG
+
     display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
 end
 
@@ -356,15 +355,12 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 25) > maxMoney) begin
                 
             num = 25;
-            //$display("DEBUG (vending_machine), totalMoney = %0d", totalMoney);
         end
                 
         else begin
                 
             totalMoney = totalMoney + 25;
             num = totalMoney;
-            //$display("DEBUG (vending_machine), maxMoney = %0d", maxMoney);
-            //$display("DEBUG (vending_machine), totalMoney %0d", totalMoney);
         end
     end
             
@@ -410,8 +406,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         end
     end
     
-    coins = coins + tmpCoins;   // adds overflow change to total change in coins; will display when display = coins
-    #1; // DEBUG
+    //coins = coins + tmpCoins;   // adds overflow change to total change in coins; will display when display = coins
     display = num;
 end
 
@@ -429,9 +424,8 @@ always @(posedge cancelReset) begin
     
     totalMoney = 0;
     change = 0;
-    coins = 0;
+    //coins = 0;
     select = 8'hx;
-    #1; // DEBUG
     display = tmpDisp;  // print change on 7SD
 end
 
@@ -440,14 +434,12 @@ always @(posedge coinsDisp) begin
     decimal = 0;
     coinsDispTmp = display; // save current 7SD to restore on negedge button press
     num = tmpCoins; // loads tmpDisp with change in coins converted to 7SD format
-    #1; // DEBUG
     display = tmpDisp;  // displays change in coins in 7SD format
     //$display("DEBUG (vending_machine), posedge coinsDisp");
 end
 
 always @(negedge coinsDisp) begin
 
-    #1; // DEBUG
     display = coinsDispTmp; // restore previously saved 7SD value
     //$display("DEBUG (vending_machine), negedge coinsDisp");
 end
