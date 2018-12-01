@@ -3,6 +3,7 @@
 module num_to_7SD(
     input wire [13:0] intNum, 
     input wire decimal,
+    input wire negative,
     output wire [31:0] sevenSeg
     );
 
@@ -37,6 +38,12 @@ always @(*) begin
         8 : sseg = 8'b00000001;   // 8
         9 : sseg = 8'b00100001;   // 9
     endcase
+    
+    if (negative) begin
+    
+        sseg = 8'b01111111;
+        $display("DEBUG (num_to_7SD), *negative*");
+    end
     
     display = {display, sseg};
     
@@ -95,8 +102,19 @@ always @(*) begin
         display = 32'b01111111011111110111111101111111;
     end
     
+    // DEBUG
     if (decimal) begin
-        $display("DEBUG: (num_to_7SD), display = %0d%0d.%0d%0d", thousands, hundreds, tens, ones);
+    
+        if (negative) begin
+        
+            $display("DEBUG: (num_to_7SD), *negative*");
+            $display("DEBUG: (num_to_7SD), display = -%0d.%0d%0d", hundreds, tens, ones);
+        end
+        
+        else begin
+        
+            $display("DEBUG: (num_to_7SD), display = %0d%0d.%0d%0d", thousands, hundreds, tens, ones);
+        end
     end
     
     if (decimal == 1'b0) begin
