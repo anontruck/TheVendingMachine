@@ -19,6 +19,18 @@ assign sevenSeg = display;
 
 always @(*) begin
 
+    /*
+    if ((number > 0) && (decimal == 0)) begin
+    
+        // CODE FROM BELOW
+    end
+    
+    else begin
+    
+        // DISPlAY 4 DASHES
+    end
+    */
+
     number = intNum;
     thousands = number / 1000;
     hundreds = (number - (thousands * 1000)) / 100;
@@ -87,6 +99,14 @@ always @(*) begin
         8 : sseg = 8'b00000001;   // 8
         9 : sseg = 8'b00100001;   // 9
     endcase
+    
+    if (decimal) begin
+        $display("DEBUG: (num_to_7SD), display = %0d%0d.%0d%0d", thousands, hundreds, tens, ones);
+    end
+    
+    if (decimal == 1'b0) begin
+        $display("DEBUG: (num_to_7SD), display = %0d%0d%0d%0d", thousands, hundreds, tens, ones);
+    end
     
     display = {display, sseg};
 end

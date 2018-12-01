@@ -17,6 +17,7 @@ module vending_machine(
     input wire dollar,
     input wire five,
     input wire cancelReset,
+    input wire coinsDisp,  // button to show current change in coins
     output wire gLEDA1, // green LED for A1 - means inserted $ >= A1 price
     output wire rLEDA1, // red LED A1 - means A1 is OOS
     output wire gLEDA2,
@@ -35,15 +36,14 @@ module vending_machine(
     output wire rLEDC2,
     output wire gLEDC3,
     output wire rLEDC3,
-    output wire coinsDisp,  // button to show current change in coins
     output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
     );
 
 reg [31:0] display;
 assign board7SD = display;
 
-reg [8:0] priceA1 = 100;    // 9 bits to hold up to binary 500, minus the sign bit
-reg [8:0] priceA2 = 0;      // might not be proper assignment here (outside always block)
+reg [8:0] priceA1 = 100;
+reg [8:0] priceA2 = 0;
 reg [8:0] priceA3 = 125;
 reg [8:0] priceB1 = 175;
 reg [8:0] priceB2 = 225;
@@ -53,7 +53,7 @@ reg [8:0] priceC2 = 325;
 reg [8:0] priceC3 = 375;
 
 reg [8:0] maxMoney;
-reg [8:0] totalMoney;
+reg [8:0] totalMoney = 0;
 reg [8:0] change;
 reg [8:0] coins;   // integer value showing each coin amount
 
@@ -67,7 +67,7 @@ assign gLEDC1 = ((totalMoney >= priceC1) && (priceC1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDC2 = ((totalMoney >= priceC2) && (priceC2 != 0)) ? 1'b1 : 1'b0;
 assign gLEDC3 = ((totalMoney >= priceC3) && (priceC3 != 0)) ? 1'b1 : 1'b0;
 
-assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;   // need to OOS value = 0
+assign rLEDA1 = (priceA1 == 0) ? 1'b1 : 1'b0;
 assign rLEDA2 = (priceA2 == 0) ? 1'b1 : 1'b0;
 assign rLEDA3 = (priceA3 == 0) ? 1'b1 : 1'b0;
 assign rLEDB1 = (priceB1 == 0) ? 1'b1 : 1'b0;
@@ -82,17 +82,17 @@ reg [31:0] coinsDispTmp;    // to hold 7SD value when pressing coinsDisp
 // temporary registers for instantiated modules
 reg [13:0] num; // holds integer value to print (change or coins)
 reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
-reg [31:0] tmpDisp; // holder for output before printing (num_to_7SD)
-reg [8:0] tmpCoins; // holder for change in coins (num_to_coins)
+wire [31:0] tmpDisp; // holder for output before printing (num_to_7SD)
+wire [13:0] tmpCoins; // holder for change in coins (num_to_coins)
 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .sevenSeg(tmpDisp));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
 
-    if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+    decimal = 1;
 
-            decimal = 1;
+    if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
     
             if (A1) begin
             
@@ -142,11 +142,9 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
     else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
 
-        decimal = 1;
-
         if (A1) begin
         
-            if (totalMoney >= priceA1) begin
+            if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
             
                 change = totalMoney - priceA1;
                 num = change;   // loads tmpDisp with change; will print when display = tmpDisp
@@ -160,7 +158,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (A2) begin
                 
-            if (totalMoney >= priceA2) begin
+            if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
             
                 change = totalMoney - priceA2;
                 num = change;
@@ -174,7 +172,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (A3) begin
                         
-            if (totalMoney >= priceA3) begin
+            if ((totalMoney >= priceA3) && (priceA3 != 1'b0)) begin
         
                 change = totalMoney - priceA3;
                 num = change;
@@ -188,7 +186,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (B1) begin
                                 
-            if (totalMoney >= priceB1) begin
+            if ((totalMoney >= priceB1) && (priceB1 != 1'b0)) begin
         
                 change = totalMoney - priceB1;
                 num = change;
@@ -202,7 +200,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (B2) begin
                                         
-            if (totalMoney >= priceB2) begin
+            if ((totalMoney >= priceB2) && (priceB2 != 1'b0)) begin
         
                 change = totalMoney - priceB2;
                 num = change;
@@ -216,7 +214,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (B3) begin
                                                 
-            if (totalMoney >= priceB3) begin
+            if ((totalMoney >= priceB3) && (priceB3 != 1'b0)) begin
         
                 change = totalMoney - priceB3;
                 num = change;
@@ -230,7 +228,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
 
         else if (C1) begin
                                 
-            if (totalMoney >= priceC1) begin
+            if ((totalMoney >= priceC1) && (priceC1 != 1'b0)) begin
         
                 change = totalMoney - priceC1;
                 num = change;
@@ -244,7 +242,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (C2) begin
                                         
-            if (totalMoney >= priceC2) begin
+            if ((totalMoney >= priceC2) && (priceC2 != 1'b0)) begin
         
                 change = totalMoney - priceC2;
                 num = change;
@@ -258,7 +256,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
         else if (C3) begin
                                                 
-            if (totalMoney >= priceC3) begin
+            if ((totalMoney >= priceC3) && (priceC3 != 1'b0)) begin
         
                 change = totalMoney - priceC3;
                 num = change;
@@ -273,6 +271,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         totalMoney = 0;
     end
     
+    #1; // DEBUG
     display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
 end
 
@@ -290,6 +289,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         else begin
         
             totalMoney = totalMoney + 5;
+            num = totalMoney;
         end
     end
             
@@ -303,6 +303,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         else begin
                 
             totalMoney = totalMoney + 10;
+            num = totalMoney;
         end
     end
             
@@ -311,11 +312,14 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 25) > maxMoney) begin
                 
             num = 25;
+            $display("DEBUG (vending_machine), totalMoney > 500");
         end
                 
         else begin
                 
             totalMoney = totalMoney + 25;
+            num = totalMoney;
+            //$display("DEBUG (vending_machine), totalMoney <= 500");
         end
     end
             
@@ -329,6 +333,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         else begin
                 
             totalMoney = totalMoney + 50;
+            num = totalMoney;
         end
     end
             
@@ -342,6 +347,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         else begin
                 
             totalMoney = totalMoney + 100;
+            num = totalMoney;
         end
     end
             
@@ -355,10 +361,13 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         else begin
                 
             totalMoney = totalMoney + 500;
+            num = totalMoney;
         end
     end
     
     coins = coins + tmpCoins;   // adds overflow change to total change in coins; will display when display = coins
+    #1; // DEBUG
+    display = num;
 end
 
 always @(posedge cancelReset) begin
@@ -373,6 +382,7 @@ always @(posedge cancelReset) begin
     totalMoney = 0;
     change = 0;
     coins = 0;
+    #1; // DEBUG
     display = tmpDisp;  // print change on 7SD
 end
 
@@ -382,11 +392,13 @@ always @(posedge coinsDisp) begin
 
     coinsDispTmp = display; // save current 7SD to restore on negedge button press
     num = tmpCoins; // loads tmpDisp with change in coins converted to 7SD format
+    #1; // DEBUG
     display = tmpDisp;  // displays change in coins in 7SD format
 end
 
 always @(negedge coinsDisp) begin
 
+    #1; // DEBUG
     display = coinsDispTmp; // restore previously saved 7SD value
 end
 

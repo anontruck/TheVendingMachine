@@ -1,11 +1,11 @@
 `timescale 1ns / 1ps
 
 module num_to_coins(
-    input wire [8:0] intNum,
-    output wire [13:0] value
+    input wire [13:0] intNum,    // change, max = maxMoney (500)
+    output wire [13:0] value    // max = 5000
     );
 
-reg [8:0] number;
+reg [13:0] number;
 reg [3:0] dollars;
 reg [3:0] quarters;
 reg [3:0] dimes;
