@@ -52,7 +52,7 @@ reg [8:0] priceC1 = 100;
 reg [8:0] priceC2 = 325;
 reg [8:0] priceC3 = 375;
 
-reg [8:0] maxMoney;
+reg [8:0] maxMoney = 500;
 reg [8:0] totalMoney = 0;
 reg [8:0] change;
 reg [8:0] coins;   // integer value showing each coin amount
@@ -153,6 +153,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             else begin
             
                 // what to do if user selects an item without enough money inserted?
+                // show negative value, required money
             end
         end
         
@@ -269,6 +270,8 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         end
 
         totalMoney = 0;
+        change = 0;
+        coins = 0;
     end
     
     #1; // DEBUG
@@ -312,14 +315,15 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 25) > maxMoney) begin
                 
             num = 25;
-            $display("DEBUG (vending_machine), totalMoney > 500");
+            //$display("DEBUG (vending_machine), totalMoney = %0d", totalMoney);
         end
                 
         else begin
                 
             totalMoney = totalMoney + 25;
             num = totalMoney;
-            //$display("DEBUG (vending_machine), totalMoney <= 500");
+            //$display("DEBUG (vending_machine), maxMoney = %0d", maxMoney);
+            //$display("DEBUG (vending_machine), totalMoney %0d", totalMoney);
         end
     end
             
@@ -379,6 +383,11 @@ always @(posedge cancelReset) begin
         num = change;   // loads tmpDisp with change in 7SD decimal format
     end
     
+    else if (totalMoney > 0) begin
+    
+        num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
+    end
+    
     totalMoney = 0;
     change = 0;
     coins = 0;
@@ -394,12 +403,14 @@ always @(posedge coinsDisp) begin
     num = tmpCoins; // loads tmpDisp with change in coins converted to 7SD format
     #1; // DEBUG
     display = tmpDisp;  // displays change in coins in 7SD format
+    //$display("DEBUG (vending_machine), posedge coinsDisp");
 end
 
 always @(negedge coinsDisp) begin
 
     #1; // DEBUG
     display = coinsDispTmp; // restore previously saved 7SD value
+    //$display("DEBUG (vending_machine), negedge coinsDisp");
 end
 
 endmodule

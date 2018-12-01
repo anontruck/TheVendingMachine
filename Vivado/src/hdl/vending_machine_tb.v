@@ -87,6 +87,15 @@ initial begin
     #1 A1 = 1;
     #1 A1 = 0;
     
+    #1 A2 = 1;
+    #1 A2 = 0;
+    
+    #1 B2 = 1;
+    #1 B2 = 0;
+    
+    #1 C3 = 1;
+    #1 C3 = 0;
+    
     #1 dollar = 1;
     #1 dollar = 0;
     
@@ -105,8 +114,14 @@ initial begin
     #1 quarter = 1;
     #1 quarter = 0;
     
+    #1 coinsDisp = 1;
+    #1 coinsDisp = 0;
+
     #1 A1 = 1;
     #1 A1 = 0;
+
+    #1 cancelReset = 1;
+    #1 cancelReset = 0;
     
     #1 coinsDisp = 1;
     #1 coinsDisp = 0;
