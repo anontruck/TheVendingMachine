@@ -107,6 +107,7 @@ initial begin
     #1 A1 = 1;
     #1 A1 = 0;
     
+    /*
     $display("A2 = 1");
     #1 A2 = 1;
     #1 A2 = 0;
@@ -118,14 +119,17 @@ initial begin
     $display("C3 = 1");
     #1 C3 = 1;
     #1 C3 = 0;
+    */
     
     $display("quarter = 1");
     #1 quarter = 1;
     #1 quarter = 0;
     
+    /*
     $display("A1 = 1");
     #1 A1 = 1;
     #1 A1 = 0;
+    */
     
     $display("dollar = 1");
     #1 dollar = 1;
@@ -151,17 +155,25 @@ initial begin
     #1 coinsDisp = 1;
     #1 coinsDisp = 0;
 
+    /*
     $display("A1 = 1");
     #1 A1 = 1;
     #1 A1 = 0;
+
+    $display("coinsDisp = 1");
+    #1 coinsDisp = 1;
+    #1 coinsDisp = 0;
+    */
 
     $display("cancelReset = 1");
     #1 cancelReset = 1;
     #1 cancelReset = 0;
     
+    /*
     $display("coinsDisp = 1");
     #1 coinsDisp = 1;
     #1 coinsDisp = 0;
+    */
     
     #1000 $finish;
 end

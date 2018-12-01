@@ -101,6 +101,7 @@ always @(*) begin
         display = 32'b01111111011111110111111101111111;
     end
     
+    /*
     // DEBUG
     if (decimal) begin
     
@@ -118,6 +119,7 @@ always @(*) begin
     if (decimal == 1'b0) begin
         $display("DEBUG: (num_to_7SD), display = %0d%0d%0d%0d", thousands, hundreds, tens, ones);
     end
+    */
 end
 
 endmodule

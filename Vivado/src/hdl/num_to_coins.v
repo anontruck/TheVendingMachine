@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module num_to_coins(
-    input wire [13:0] intNum,    // change, max = maxMoney (500)
-    output wire [13:0] value    // max = 5000
+    input wire [13:0] intNum,
+    output wire [13:0] value
     );
 
 reg [13:0] number;

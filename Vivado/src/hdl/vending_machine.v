@@ -63,8 +63,8 @@ reg [8:0] priceC3 = 375;
 
 reg [8:0] maxMoney = 500;
 reg [8:0] totalMoney = 0;
-reg [8:0] change;
-//reg [8:0] coins;   // integer value showing each coin amount
+reg [8:0] change = 0;
+reg [8:0] coins = 0;   // integer value showing each coin amount
 
 reg [7:0] select = 8'hx;    // selected item code (A1, A2, A3, etc.)
 
@@ -105,7 +105,7 @@ reg [13:0] num; // holds integer value to print (change or coins)
 reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
 reg negative;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
 wire [31:0] tmpDisp; // holder for output before printing (num_to_7SD)
-wire [13:0] tmpCoins; // holder for change in coins (num_to_coins)
+wire [13:0] tmpCoins; // holder for change in coins (num_to_coins); 14 bits for decimal 9999
 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sevenSeg(tmpDisp));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
@@ -309,9 +309,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             end
         end
 
-        totalMoney = 0;
-        change = 0;
-        //coins = 0;
+        if (select != 8'hx) begin   // reset if selection was made successfully
+        
+            totalMoney = 0;
+            change = 0;
+            coins = 0;
+        end
+
     end
 
     display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
@@ -327,12 +331,14 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 5) > maxMoney) begin
             
             num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
+            coins = coins + tmpCoins;
         end
         
         else begin
         
             totalMoney = totalMoney + 5;
-            num = totalMoney;
+            num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
+            display = tmpDisp;
         end
     end
             
@@ -341,12 +347,14 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 10) > maxMoney) begin
                 
             num = 10;
+            coins = coins + tmpCoins;
         end
                 
         else begin
                 
             totalMoney = totalMoney + 10;
             num = totalMoney;
+            display = tmpDisp;
         end
     end
             
@@ -355,12 +363,14 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 25) > maxMoney) begin
                 
             num = 25;
+            coins = coins + tmpCoins;
         end
                 
         else begin
                 
             totalMoney = totalMoney + 25;
             num = totalMoney;
+            display = tmpDisp;
         end
     end
             
@@ -369,12 +379,14 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 50) > maxMoney) begin
                 
             num = 50;
+            coins = coins + tmpCoins;
         end
                 
         else begin
                 
             totalMoney = totalMoney + 50;
             num = totalMoney;
+            display = tmpDisp;
         end
     end
             
@@ -383,12 +395,14 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 100) > maxMoney) begin
                 
             num = 100;
+            coins = coins + tmpCoins;
         end
                 
         else begin
                 
             totalMoney = totalMoney + 100;
             num = totalMoney;
+            display = tmpDisp;
         end
     end
             
@@ -397,6 +411,7 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
         if ((totalMoney + 500) > maxMoney) begin
                 
             num = 500;
+            coins = coins + tmpCoins;
         end
                 
         else begin
@@ -405,12 +420,12 @@ always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or p
             num = totalMoney;
         end
     end
-    
-    //coins = coins + tmpCoins;   // adds overflow change to total change in coins; will display when display = coins
-    display = num;
 end
 
 always @(posedge cancelReset) begin
+
+    decimal = 1;
+    negative = 0;
 
     if (change > 0) begin
 
@@ -422,26 +437,26 @@ always @(posedge cancelReset) begin
         num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
     end
     
-    totalMoney = 0;
-    change = 0;
-    //coins = 0;
-    select = 8'hx;
     display = tmpDisp;  // print change on 7SD
+    totalMoney = 0; // reset
+    change = 0;
+    coins = 0;
+    select = 8'hx;
 end
 
 always @(posedge coinsDisp) begin
 
     decimal = 0;
+    negative = 0;
+    
     coinsDispTmp = display; // save current 7SD to restore on negedge button press
-    num = tmpCoins; // loads tmpDisp with change in coins converted to 7SD format
+    num = coins;    // loads tmpDisp with change in coins converted to 7SD format
     display = tmpDisp;  // displays change in coins in 7SD format
-    //$display("DEBUG (vending_machine), posedge coinsDisp");
 end
 
 always @(negedge coinsDisp) begin
 
     display = coinsDispTmp; // restore previously saved 7SD value
-    //$display("DEBUG (vending_machine), negedge coinsDisp");
 end
 
 endmodule
