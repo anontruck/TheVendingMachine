@@ -110,353 +110,356 @@ wire [13:0] tmpCoins; // holder for change in coins (num_to_coins); 14 bits for 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sevenSeg(tmpDisp));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
 
-always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3) begin
+always @(*) begin
 
-    decimal = 1;
-    negative = 0;
-
-    if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+    if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
+    
+        decimal = 1;
+        negative = 0;
+    
+        if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+        
+                if (A1) begin
+                
+                    num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
+                end
+                
+                else if (A2) begin
+                        
+                    num = priceA2;
+                end
+                
+                else if (A3) begin
+                                
+                    num = priceA3;
+                end
+                
+                else if (B1) begin
+                                        
+                    num = priceB1;
+                end
+                
+                else if (B2) begin
+                                                
+                    num = priceB2;
+                end
+                
+                else if (B3) begin
+                                                        
+                    num = priceB3;
+                end
+        
+                else if (C1) begin
+                                        
+                    num = priceC1;
+                end
+                
+                else if (C2) begin
+                                                
+                    num = priceC2;
+                end
+                
+                else if (C3) begin
+                                                        
+                    num = priceC3;
+                end
+        end
+        
+        else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
     
             if (A1) begin
             
-                num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
+                if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
+                
+                    change = totalMoney - priceA1;
+                    num = change;   // loads tmpDisp with change; will print when display = tmpDisp
+                    select = 8'ha1;
+                end
+                
+                else begin
+                
+                    negative = 1;
+                    num = priceA1 - totalMoney; // loads tmpDisp with required change; will print when display = tmpDisp
+                end
             end
             
             else if (A2) begin
                     
-                num = priceA2;
+                if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
+                
+                    change = totalMoney - priceA2;
+                    num = change;
+                    select = 8'ha2;
+                end
+                        
+                else begin
+                        
+                    negative = 1;
+                    num = priceA2 - totalMoney;
+                end
             end
             
             else if (A3) begin
                             
-                num = priceA3;
+                if ((totalMoney >= priceA3) && (priceA3 != 1'b0)) begin
+            
+                    change = totalMoney - priceA3;
+                    num = change;
+                    select = 8'ha3;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceA3 - totalMoney;
+                end
             end
             
             else if (B1) begin
                                     
-                num = priceB1;
+                if ((totalMoney >= priceB1) && (priceB1 != 1'b0)) begin
+            
+                    change = totalMoney - priceB1;
+                    num = change;
+                    select = 8'hb1;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceB1 - totalMoney;
+                end
             end
             
             else if (B2) begin
                                             
-                num = priceB2;
+                if ((totalMoney >= priceB2) && (priceB2 != 1'b0)) begin
+            
+                    change = totalMoney - priceB2;
+                    num = change;
+                    select = 8'hb2;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceB2 - totalMoney;
+                end
             end
             
             else if (B3) begin
                                                     
-                num = priceB3;
+                if ((totalMoney >= priceB3) && (priceB3 != 1'b0)) begin
+            
+                    change = totalMoney - priceB3;
+                    num = change;
+                    select = 8'hb3;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceB3 - totalMoney;
+                end
             end
     
             else if (C1) begin
                                     
-                num = priceC1;
+                if ((totalMoney >= priceC1) && (priceC1 != 1'b0)) begin
+            
+                    change = totalMoney - priceC1;
+                    num = change;
+                    select = 8'hc1;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceC1 - totalMoney;
+                end
             end
             
             else if (C2) begin
                                             
-                num = priceC2;
+                if ((totalMoney >= priceC2) && (priceC2 != 1'b0)) begin
+            
+                    change = totalMoney - priceC2;
+                    num = change;
+                    select = 8'hc2;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceC2 - totalMoney;
+                end
             end
             
             else if (C3) begin
                                                     
-                num = priceC3;
-            end
-    end
-    
-    else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
-
-        if (A1) begin
-        
-            if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
+                if ((totalMoney >= priceC3) && (priceC3 != 1'b0)) begin
             
-                change = totalMoney - priceA1;
-                num = change;   // loads tmpDisp with change; will print when display = tmpDisp
-                select = 8'ha1;
+                    change = totalMoney - priceC3;
+                    num = change;
+                    select = 8'hc3;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceC3 - totalMoney;
+                end
+            end
+    
+            if (select != 8'hx) begin   // reset if selection was made successfully
+            
+                totalMoney = 0;
+                change = 0;
+                coins = 0;
+            end
+    
+        end
+    
+        display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
+    end
+
+    if (nickel || dime || quarter || fifty || dollar || five) begin
+    
+        decimal = 1;
+        negative = 0;
+    
+        if (nickel) begin
+        
+            if ((totalMoney + 5) > maxMoney) begin
+                
+                num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
+                coins = coins + tmpCoins;
             end
             
             else begin
             
-                negative = 1;
-                num = priceA1 - totalMoney; // loads tmpDisp with required change; will print when display = tmpDisp
+                totalMoney = totalMoney + 5;
+                num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
+                display = tmpDisp;
             end
         end
-        
-        else if (A2) begin
                 
-            if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
-            
-                change = totalMoney - priceA2;
-                num = change;
-                select = 8'ha2;
+        else if (dime) begin
+    
+            if ((totalMoney + 10) > maxMoney) begin
+                    
+                num = 10;
+                coins = coins + tmpCoins;
             end
                     
             else begin
                     
-                negative = 1;
-                num = priceA2 - totalMoney;
+                totalMoney = totalMoney + 10;
+                num = totalMoney;
+                display = tmpDisp;
             end
         end
-        
-        else if (A3) begin
-                        
-            if ((totalMoney >= priceA3) && (priceA3 != 1'b0)) begin
-        
-                change = totalMoney - priceA3;
-                num = change;
-                select = 8'ha3;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceA3 - totalMoney;
-            end
-        end
-        
-        else if (B1) begin
-                                
-            if ((totalMoney >= priceB1) && (priceB1 != 1'b0)) begin
-        
-                change = totalMoney - priceB1;
-                num = change;
-                select = 8'hb1;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceB1 - totalMoney;
-            end
-        end
-        
-        else if (B2) begin
-                                        
-            if ((totalMoney >= priceB2) && (priceB2 != 1'b0)) begin
-        
-                change = totalMoney - priceB2;
-                num = change;
-                select = 8'hb2;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceB2 - totalMoney;
-            end
-        end
-        
-        else if (B3) begin
-                                                
-            if ((totalMoney >= priceB3) && (priceB3 != 1'b0)) begin
-        
-                change = totalMoney - priceB3;
-                num = change;
-                select = 8'hb3;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceB3 - totalMoney;
-            end
-        end
-
-        else if (C1) begin
-                                
-            if ((totalMoney >= priceC1) && (priceC1 != 1'b0)) begin
-        
-                change = totalMoney - priceC1;
-                num = change;
-                select = 8'hc1;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceC1 - totalMoney;
-            end
-        end
-        
-        else if (C2) begin
-                                        
-            if ((totalMoney >= priceC2) && (priceC2 != 1'b0)) begin
-        
-                change = totalMoney - priceC2;
-                num = change;
-                select = 8'hc2;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceC2 - totalMoney;
-            end
-        end
-        
-        else if (C3) begin
-                                                
-            if ((totalMoney >= priceC3) && (priceC3 != 1'b0)) begin
-        
-                change = totalMoney - priceC3;
-                num = change;
-                select = 8'hc3;
-            end
-        
-            else begin
-        
-                negative = 1;
-                num = priceC3 - totalMoney;
-            end
-        end
-
-        if (select != 8'hx) begin   // reset if selection was made successfully
-        
-            totalMoney = 0;
-            change = 0;
-            coins = 0;
-        end
-
-    end
-
-    display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
-end
-
-always @(posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five) begin
-
-    decimal = 1;
-    negative = 0;
-
-    if (nickel) begin
+                
+        else if (quarter) begin
     
-        if ((totalMoney + 5) > maxMoney) begin
-            
-            num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
-            coins = coins + tmpCoins;
+            if ((totalMoney + 25) > maxMoney) begin
+                    
+                num = 25;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 25;
+                num = totalMoney;
+                display = tmpDisp;
+            end
+        end
+                
+        else if (fifty) begin
+    
+            if ((totalMoney + 50) > maxMoney) begin
+                    
+                num = 50;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 50;
+                num = totalMoney;
+                display = tmpDisp;
+            end
+        end
+                
+        else if (dollar) begin
+    
+            if ((totalMoney + 100) > maxMoney) begin
+                    
+                num = 100;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 100;
+                num = totalMoney;
+                display = tmpDisp;
+            end
+        end
+                
+        else if (five) begin
+    
+            if ((totalMoney + 500) > maxMoney) begin
+                    
+                num = 500;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 500;
+                num = totalMoney;
+            end
+        end
+    end
+
+    if (cancelReset) begin
+    
+        decimal = 1;
+        negative = 0;
+    
+        if (change > 0) begin
+    
+            num = change;   // loads tmpDisp with change in 7SD decimal format
         end
         
-        else begin
+        else if (totalMoney > 0) begin
         
-            totalMoney = totalMoney + 5;
-            num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
-            display = tmpDisp;
+            num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
         end
+        
+        display = tmpDisp;  // print change on 7SD
+        totalMoney = 0; // reset
+        change = 0;
+        coins = 0;
+        select = 8'hx;
     end
-            
-    else if (dime) begin
 
-        if ((totalMoney + 10) > maxMoney) begin
-                
-            num = 10;
-            coins = coins + tmpCoins;
-        end
-                
-        else begin
-                
-            totalMoney = totalMoney + 10;
-            num = totalMoney;
-            display = tmpDisp;
-        end
-    end
-            
-    else if (quarter) begin
-
-        if ((totalMoney + 25) > maxMoney) begin
-                
-            num = 25;
-            coins = coins + tmpCoins;
-        end
-                
-        else begin
-                
-            totalMoney = totalMoney + 25;
-            num = totalMoney;
-            display = tmpDisp;
-        end
-    end
-            
-    else if (fifty) begin
-
-        if ((totalMoney + 50) > maxMoney) begin
-                
-            num = 50;
-            coins = coins + tmpCoins;
-        end
-                
-        else begin
-                
-            totalMoney = totalMoney + 50;
-            num = totalMoney;
-            display = tmpDisp;
-        end
-    end
-            
-    else if (dollar) begin
-
-        if ((totalMoney + 100) > maxMoney) begin
-                
-            num = 100;
-            coins = coins + tmpCoins;
-        end
-                
-        else begin
-                
-            totalMoney = totalMoney + 100;
-            num = totalMoney;
-            display = tmpDisp;
-        end
-    end
-            
-    else if (five) begin
-
-        if ((totalMoney + 500) > maxMoney) begin
-                
-            num = 500;
-            coins = coins + tmpCoins;
-        end
-                
-        else begin
-                
-            totalMoney = totalMoney + 500;
-            num = totalMoney;
-        end
-    end
-end
-
-always @(posedge cancelReset) begin
-
-    decimal = 1;
-    negative = 0;
-
-    if (change > 0) begin
-
-        num = change;   // loads tmpDisp with change in 7SD decimal format
-    end
+    if (coinsDisp) begin 
     
-    else if (totalMoney > 0) begin
-    
-        num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
+        decimal = 0;
+        negative = 0;
+        coinsDispTmp = display; // save current 7SD to restore on negedge button press
+        num = coins;    // loads tmpDisp with change in coins converted to 7SD format
+        display = tmpDisp;  // displays change in coins in 7SD format
     end
+
+    if (coinsDisp == 1'b0) begin
     
-    display = tmpDisp;  // print change on 7SD
-    totalMoney = 0; // reset
-    change = 0;
-    coins = 0;
-    select = 8'hx;
-end
+        display = coinsDispTmp; // restore previously saved 7SD value
+    end
 
-always @(posedge coinsDisp) begin
-
-    decimal = 0;
-    negative = 0;
-    
-    coinsDispTmp = display; // save current 7SD to restore on negedge button press
-    num = coins;    // loads tmpDisp with change in coins converted to 7SD format
-    display = tmpDisp;  // displays change in coins in 7SD format
-end
-
-always @(negedge coinsDisp) begin
-
-    display = coinsDispTmp; // restore previously saved 7SD value
 end
 
 endmodule
