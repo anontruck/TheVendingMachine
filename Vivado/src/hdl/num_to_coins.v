@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module num_to_coins(
-    input wire [8:0] intNum,
+    input wire [13:0] intNum,
     output wire [13:0] value
     );
 
