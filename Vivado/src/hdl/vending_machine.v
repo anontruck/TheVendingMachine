@@ -10,14 +10,14 @@ module vending_machine(
     input wire C1,
     input wire C2,
     input wire C3,
-    input wire nickel,
-    input wire dime,
-    input wire quarter,
-    input wire fifty,
-    input wire dollar,
-    input wire five,
+    input wire nickel_n,
+    input wire dime_n,
+    input wire quarter_n,
+    input wire fifty_n,
+    input wire dollar_n,
+    input wire five_n,
     input wire cancelReset,
-    input wire coinsDisp,  // button to show current change in coins
+    input wire coinsDisp_n,  // button to show current change in coins
     input wire clk,
     output wire gLEDA1, // green LED for A1 - means inserted $ >= A1 price
     output wire rLEDA1, // red LED for A1 - means A1 is OOS
@@ -162,6 +162,32 @@ end
 
 assign anx = en_an;
 assign value = valx;
+
+wire nickel;
+wire dime;
+wire quarter;
+wire fifty;
+wire dollar;
+wire five;
+wire coinsDisp;
+
+/*
+assign nickel_n = nickel;
+assign dime_n = dime;
+assign quarter_n = quarter;
+assign fifty_n = fifty;
+assign dollar_n = dollar;
+assign five_n = five;
+assign coinsDisp_n = coinsDisp;
+*/
+
+debounce nickelSW(.sig_out(nickel), .button_n(nickel_n), .clk_100_MHz(clk));
+debounce dimeSW(.sig_out(dime), .button_n(dime_n), .clk_100_MHz(clk));
+debounce quarterSW(.sig_out(quarter), .button_n(quarter_n), .clk_100_MHz(clk));
+debounce fiftySW(.sig_out(fifty), .button_n(fifty_n), .clk_100_MHz(clk));
+debounce dollarSW(.sig_out(dollar), .button_n(dollar_n), .clk_100_MHz(clk));
+debounce fiveSW(.sig_out(five), .button_n(five_n), .clk_100_MHz(clk));
+debounce coinsDispSW(.sig_out(coinsDisp), .button_n(coinsDisp_n), .clk_100_MHz(clk));
 
 /*
 // DEBUG: emulate 4x7SD
