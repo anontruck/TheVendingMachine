@@ -10,12 +10,12 @@ module vending_machine(
     input wire C1,
     input wire C2,
     input wire C3,
-    input wire nickel_n,
-    input wire dime_n,
-    input wire quarter_n,
-    input wire fifty_n,
-    input wire dollar_n,
-    input wire five_n,
+    input wire nickel,
+    input wire dime,
+    input wire quarter,
+    input wire fifty,
+    input wire dollar,
+    input wire five,
     input wire cancelReset,
     input wire coinsDisp_n,  // button to show current change in coins
     input wire clk,
@@ -50,13 +50,13 @@ module vending_machine(
     output wire [7:0] value
     );
 
-reg [7:0] valx;
-reg [3:0] en_an;
+reg [7:0] valx = 8'b10000001;
+reg [3:0] en_an = 4'b0;
 
-reg [7:0] dispAN0;  // LSB
-reg [7:0] dispAN1;
-reg [7:0] dispAN2;
-reg [7:0] dispAN3;  // MSB
+reg [7:0] dispAN0 = 8'b10000001;    // LSB
+reg [7:0] dispAN1 = 8'b10000001;
+reg [7:0] dispAN2 = 8'b10000001;
+reg [7:0] dispAN3 = 8'b10000001;    // MSB
 
 reg [8:0] priceA1 = 100;
 reg [8:0] priceA2 = 0;
@@ -105,31 +105,24 @@ assign dLEDC1 = (select == 8'hc1) ? 1'b1 : 1'b0;
 assign dLEDC2 = (select == 8'hc2) ? 1'b1 : 1'b0;
 assign dLEDC3 = (select == 8'hc3) ? 1'b1 : 1'b0;
 
-/*
-reg [7:0] coinsDispTmpAN0;    // to hold 7SD value when pressing coinsDisp
-reg [7:0] coinsDispTmpAN1;
-reg [7:0] coinsDispTmpAN2;
-reg [7:0] coinsDispTmpAN3;
-*/
-
 // temporary registers for instantiated modules
-reg [13:0] num; // holds integer value to print (change or coins)
-reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
-reg negative;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
+reg [13:0] num = 14'b0; // holds integer value to print (change or coins)
+reg decimal = 0;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
+reg negative = 0;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
 
-wire [7:0] tmpDispAN0;
-wire [7:0] tmpDispAN1;
-wire [7:0] tmpDispAN2;
-wire [7:0] tmpDispAN3;
+wire [7:0] tmpDispAN0 = 8'b10000001;    // LSB
+wire [7:0] tmpDispAN1 = 8'b10000001;
+wire [7:0] tmpDispAN2 = 8'b10000001;
+wire [7:0] tmpDispAN3 = 8'b10000001;    // MSB
 
-wire [13:0] tmpCoins; // holder for change in coins (num_to_coins); 14 bits for decimal 9999
+wire [13:0] tmpCoins = 14'b0;   // holder for change in coins (num_to_coins); 14 bits for decimal 9999
 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sSegAN0(tmpDispAN0), .sSegAN1(tmpDispAN1), .sSegAN2(tmpDispAN2), .sSegAN3(tmpDispAN3));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
 
 parameter N = 17;
 reg [N+1:0] counter = 0;
-wire [1:0] clkdiv;
+wire [1:0] clkdiv = 2'b0;
 
 always @(posedge clk) begin
 
@@ -163,30 +156,7 @@ end
 assign anx = en_an;
 assign value = valx;
 
-wire nickel;
-wire dime;
-wire quarter;
-wire fifty;
-wire dollar;
-wire five;
-wire coinsDisp;
-
-/*
-assign nickel_n = nickel;
-assign dime_n = dime;
-assign quarter_n = quarter;
-assign fifty_n = fifty;
-assign dollar_n = dollar;
-assign five_n = five;
-assign coinsDisp_n = coinsDisp;
-*/
-
-debounce nickelSW(.sig_out(nickel), .button_n(nickel_n), .clk_100_MHz(clk));
-debounce dimeSW(.sig_out(dime), .button_n(dime_n), .clk_100_MHz(clk));
-debounce quarterSW(.sig_out(quarter), .button_n(quarter_n), .clk_100_MHz(clk));
-debounce fiftySW(.sig_out(fifty), .button_n(fifty_n), .clk_100_MHz(clk));
-debounce dollarSW(.sig_out(dollar), .button_n(dollar_n), .clk_100_MHz(clk));
-debounce fiveSW(.sig_out(five), .button_n(five_n), .clk_100_MHz(clk));
+wire coinsDisp = 0;
 debounce coinsDispSW(.sig_out(coinsDisp), .button_n(coinsDisp_n), .clk_100_MHz(clk));
 
 /*
@@ -647,17 +617,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN2 = tmpDispAN2;
         dispAN3 = tmpDispAN3;
     end
-
-    /*
-    else if (coinsDisp == 1'b0) begin
-    
-        //#1; // DEBUG
-        dispAN0 = coinsDispTmpAN0;  // restore previously saved 7SD value
-        dispAN1 = coinsDispTmpAN1;
-        dispAN2 = coinsDispTmpAN2;
-        dispAN3 = coinsDispTmpAN3;
-    end
-    */
 
 end
 

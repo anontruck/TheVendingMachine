@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.2 (lin64) Build 2258646 Thu Jun 14 20:02:38 MDT 2018
-| Date             : Sun Dec  2 13:46:14 2018
+| Date             : Sun Dec  2 14:35:39 2018
 | Host             : Linux-Laptop running 64-bit unknown
 | Command          : report_power -file vending_machine_power_routed.rpt -pb vending_machine_power_summary_routed.pb -rpx vending_machine_power_routed.rpx
 | Design           : vending_machine
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.145        |
+| Total On-Chip Power (W)  | 0.069        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.073        |
-| Device Static (W)        | 0.072        |
+| Dynamic (W)              | 0.000        |
+| Device Static (W)        | 0.068        |
 | Effective TJA (C/W)      | 5.0          |
-| Max Ambient (C)          | 84.3         |
-| Junction Temperature (C) | 25.7         |
+| Max Ambient (C)          | 84.7         |
+| Junction Temperature (C) | 25.3         |
 | Confidence Level         | Low          |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -52,18 +52,16 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.002 |        3 |       --- |             --- |
-| Slice Logic    |     0.033 |     4844 |       --- |             --- |
-|   LUT as Logic |     0.031 |     3143 |     20800 |           15.11 |
-|   CARRY4       |     0.003 |      541 |      8150 |            6.64 |
-|   Register     |    <0.001 |      436 |     41600 |            1.05 |
-|   F7/F8 Muxes  |    <0.001 |       10 |     32600 |            0.03 |
-|   BUFG         |    <0.001 |        1 |        32 |            3.13 |
-|   Others       |     0.000 |       23 |       --- |             --- |
-| Signals        |     0.030 |     4103 |       --- |             --- |
-| I/O            |     0.008 |       57 |       106 |           53.77 |
-| Static Power   |     0.072 |          |           |                 |
-| Total          |     0.145 |          |           |                 |
+| Clocks         |     0.000 |        3 |       --- |             --- |
+| Slice Logic    |    <0.001 |      172 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      126 |     20800 |            0.61 |
+|   F7/F8 Muxes  |    <0.001 |        1 |     32600 |           <0.01 |
+|   Others       |     0.000 |        3 |       --- |             --- |
+|   Register     |     0.000 |       15 |     41600 |            0.04 |
+| Signals        |    <0.001 |      183 |       --- |             --- |
+| I/O            |    <0.001 |       55 |       106 |           51.89 |
+| Static Power   |     0.068 |          |           |                 |
+| Total          |     0.069 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -73,9 +71,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.075 |       0.065 |      0.010 |
+| Vccint    |       1.000 |     0.010 |       0.000 |      0.010 |
 | Vccaux    |       1.800 |     0.013 |       0.000 |      0.013 |
-| Vcco33    |       3.300 |     0.003 |       0.002 |      0.001 |
+| Vcco33    |       3.300 |     0.000 |       0.000 |      0.000 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |
@@ -126,11 +124,9 @@ Table of Contents
 2.2 Clock Constraints
 ---------------------
 
-+----------------+--------+-----------------+
-| Clock          | Domain | Constraint (ns) |
-+----------------+--------+-----------------+
-| external_clock | clk    |            10.0 |
-+----------------+--------+-----------------+
++-------+--------+-----------------+
+| Clock | Domain | Constraint (ns) |
++-------+--------+-----------------+
 
 
 3. Detailed Reports
@@ -142,16 +138,7 @@ Table of Contents
 +-----------------+-----------+
 | Name            | Power (W) |
 +-----------------+-----------+
-| vending_machine |     0.073 |
-|   coinsDispSW   |    <0.001 |
-|   dimeSW        |    <0.001 |
-|   dollarSW      |    <0.001 |
-|   fiftySW       |    <0.001 |
-|   fiveSW        |    <0.001 |
-|   nickelSW      |    <0.001 |
-|   quarterSW     |    <0.001 |
-|   toCoins       |     0.042 |
-|   toDisp        |     0.019 |
+| vending_machine |    <0.001 |
 +-----------------+-----------+
 
 
