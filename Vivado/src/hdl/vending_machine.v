@@ -235,7 +235,7 @@ always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
 end
 */
 
-always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or posedge coinsDisp) begin
+always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or negedge coinsDisp) begin
 
     if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
     
@@ -604,7 +604,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN3 = 8'b10000001;   // 0
     end
 
-    if (coinsDisp) begin 
+    if (coinsDisp == 1'b0) begin 
     
         decimal = 0;
         negative = 0;
