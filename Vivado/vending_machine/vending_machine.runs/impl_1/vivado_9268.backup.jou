@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2018.2 (64-bit)
+# SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
+# IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
+# Start of session at: Sat Dec  1 19:40:12 2018
+# Process ID: 9268
+# Current directory: /home/yellowsnow4free/Documents/GitHub/TheVendingMachine/Vivado/vending_machine/vending_machine.runs/impl_1
+# Command line: vivado -log vending_machine.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source vending_machine.tcl -notrace
+# Log file: /home/yellowsnow4free/Documents/GitHub/TheVendingMachine/Vivado/vending_machine/vending_machine.runs/impl_1/vending_machine.vdi
+# Journal file: /home/yellowsnow4free/Documents/GitHub/TheVendingMachine/Vivado/vending_machine/vending_machine.runs/impl_1/vivado.jou
+#-----------------------------------------------------------
+source vending_machine.tcl -notrace
