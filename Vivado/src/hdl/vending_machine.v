@@ -53,10 +53,10 @@ module vending_machine(
 reg [7:0] valx;
 reg [3:0] en_an;
 
-reg [7:0] dispAN0;
+reg [7:0] dispAN0;  // LSB
 reg [7:0] dispAN1;
 reg [7:0] dispAN2;
-reg [7:0] dispAN3;
+reg [7:0] dispAN3;  // MSB
 
 reg [8:0] priceA1 = 100;
 reg [8:0] priceA2 = 0;
@@ -73,7 +73,7 @@ reg [8:0] totalMoney = 0;
 reg [8:0] change = 0;
 reg [8:0] coins = 0;   // integer value showing each coin amount
 
-reg [7:0] select = 8'hx;    // selected item code (A1, A2, A3, etc.)
+reg [7:0] select = 8'h0;    // selected item code (A1, A2, A3, etc.)
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -105,8 +105,7 @@ assign dLEDC1 = (select == 8'hc1) ? 1'b1 : 1'b0;
 assign dLEDC2 = (select == 8'hc2) ? 1'b1 : 1'b0;
 assign dLEDC3 = (select == 8'hc3) ? 1'b1 : 1'b0;
 
-//reg [31:0] coinsDispTmp;    // to hold 7SD value when pressing coinsDisp
-reg [7:0] coinsDispTmpAN0;
+reg [7:0] coinsDispTmpAN0;    // to hold 7SD value when pressing coinsDisp
 reg [7:0] coinsDispTmpAN1;
 reg [7:0] coinsDispTmpAN2;
 reg [7:0] coinsDispTmpAN3;
@@ -130,14 +129,15 @@ parameter N = 17;
 reg [N+1:0] counter = 0;
 wire [1:0] clkdiv;
 
-// this will give us the frequency we want
 always @(posedge clk) begin
+
     counter <= counter + 1;
 end
 
 assign clkdiv = counter[N+1:N];
 
 always @(*) begin
+
     case(clkdiv)
         2'b00 : begin
             valx    <= dispAN0;
@@ -161,7 +161,79 @@ end
 assign anx = en_an;
 assign value = valx;
 
-always @(*) begin
+/*
+// DEBUG: emulate 4x7SD
+always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
+
+    case(dispAN3)   // MSB; never has decimal
+        8'b01111111 : $write("-");   // -
+        8'b10000001 : $write("0");   // 0
+        8'b11110011 : $write("1");   // 1
+        8'b01001001 : $write("2");   // 2
+        8'b01100001 : $write("3");   // 3
+        8'b00110011 : $write("4");   // 4
+        8'b00100101 : $write("5");   // 5
+        8'b00000101 : $write("6");   // 6
+        8'b11110001 : $write("7");   // 7
+        8'b00000001 : $write("8");   // 8
+        8'b00100001 : $write("9");   // 9
+    endcase
+    
+    case(dispAN2)   // only one with decimal
+        8'b01111111 : $write("-");   // -
+        8'b10000001 : $write("0");   // 0, no decimal
+        8'b11110011 : $write("1");   // 1
+        8'b01001001 : $write("2");   // 2
+        8'b01100001 : $write("3");   // 3
+        8'b00110011 : $write("4");   // 4
+        8'b00100101 : $write("5");   // 5
+        8'b00000101 : $write("6");   // 6
+        8'b11110001 : $write("7");   // 7
+        8'b00000001 : $write("8");   // 8
+        8'b00100001 : $write("9");   // 9
+        8'b10000000 : $write("0.");   // 0, with decimal
+        8'b11110010 : $write("1.");   // 1
+        8'b01001000 : $write("2.");   // 2
+        8'b01100000 : $write("3.");   // 3
+        8'b00110010 : $write("4.");   // 4
+        8'b00100100 : $write("5.");   // 5
+        8'b00000100 : $write("6.");   // 6
+        8'b11110000 : $write("7.");   // 7
+        8'b00000000 : $write("8.");   // 8
+        8'b00100000 : $write("9.");   // 9
+    endcase
+    
+    case(dispAN1)   // never has decimal
+        8'b01111111 : $write("-");   // -
+        8'b10000001 : $write("0");   // 0
+        8'b11110011 : $write("1");   // 1
+        8'b01001001 : $write("2");   // 2
+        8'b01100001 : $write("3");   // 3
+        8'b00110011 : $write("4");   // 4
+        8'b00100101 : $write("5");   // 5
+        8'b00000101 : $write("6");   // 6
+        8'b11110001 : $write("7");   // 7
+        8'b00000001 : $write("8");   // 8
+        8'b00100001 : $write("9");   // 9
+    endcase
+    
+    case(dispAN0)   // LSB; never has decimal
+        8'b01111111 : $write("-\n");   // -
+        8'b10000001 : $write("0\n");   // 0
+        8'b11110011 : $write("1\n");   // 1
+        8'b01001001 : $write("2\n");   // 2
+        8'b01100001 : $write("3\n");   // 3
+        8'b00110011 : $write("4\n");   // 4
+        8'b00100101 : $write("5\n");   // 5
+        8'b00000101 : $write("6\n");   // 6
+        8'b11110001 : $write("7\n");   // 7
+        8'b00000001 : $write("8\n");   // 8
+        8'b00100001 : $write("9\n");   // 9
+    endcase
+end
+*/
+
+always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or coinsDisp) begin
 
     if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
     
@@ -362,7 +434,7 @@ always @(*) begin
                 end
             end
     
-            if (select != 8'hx) begin   // reset if selection was made successfully
+            if (select != 8'h0) begin   // reset if selection was made successfully
             
                 totalMoney = 0;
                 change = 0;
@@ -370,9 +442,9 @@ always @(*) begin
             end
     
         end
-    
-        //display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
-        dispAN0 = tmpDispAN0;
+
+        //#1; // DEBUG
+        dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
         dispAN1 = tmpDispAN1;
         dispAN2 = tmpDispAN2;
         dispAN3 = tmpDispAN3;
@@ -395,7 +467,7 @@ always @(*) begin
             
                 totalMoney = totalMoney + 5;
                 num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
-                //display = tmpDisp;
+                //#1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -415,7 +487,7 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 10;
                 num = totalMoney;
-                //display = tmpDisp;
+                //#1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -435,7 +507,7 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 25;
                 num = totalMoney;
-                //display = tmpDisp;
+                //#1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -455,7 +527,7 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 50;
                 num = totalMoney;
-                //display = tmpDisp;
+                //#1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -475,7 +547,7 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 100;
                 num = totalMoney;
-                //display = tmpDisp;
+                //#1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -495,7 +567,7 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 500;
                 num = totalMoney;
-                //display = tmpDisp;
+                //#1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -518,39 +590,38 @@ always @(*) begin
         
             num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
         end
-        
-        //display = tmpDisp;  // print change on 7SD
-        dispAN0 = tmpDispAN0;
-        dispAN1 = tmpDispAN1;
-        dispAN2 = tmpDispAN2;
-        dispAN3 = tmpDispAN3;
+
         totalMoney = 0; // reset
         change = 0;
         coins = 0;
-        select = 8'hx;
+        select = 8'h0;
+        //#1;
+        dispAN0 = 8'b10000001;   // 0
+        dispAN1 = 8'b10000001;   // 0
+        dispAN2 = 8'b10000001;   // 0
+        dispAN3 = 8'b10000001;   // 0
     end
 
     if (coinsDisp) begin 
     
         decimal = 0;
         negative = 0;
-        //coinsDispTmp = display; // save current 7SD to restore on negedge button press
-        coinsDispTmpAN0 = dispAN0;
+        coinsDispTmpAN0 = dispAN0;  // save current 7SD to restore on negedge button press
         coinsDispTmpAN1 = dispAN1;
         coinsDispTmpAN2 = dispAN2;
         coinsDispTmpAN3 = dispAN3;
         num = coins;    // loads tmpDisp with change in coins converted to 7SD format
-        //display = tmpDisp;  // displays change in coins in 7SD format
-        dispAN0 = tmpDispAN0;
+        //#1; // DEBUG
+        dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
         dispAN1 = tmpDispAN1;
         dispAN2 = tmpDispAN2;
         dispAN3 = tmpDispAN3;
     end
 
-    if (coinsDisp == 1'b0) begin
+    else if (coinsDisp == 1'b0) begin
     
-        //display = coinsDispTmp; // restore previously saved 7SD value
-        dispAN0 = coinsDispTmpAN0;
+        //#1; // DEBUG
+        dispAN0 = coinsDispTmpAN0;  // restore previously saved 7SD value
         dispAN1 = coinsDispTmpAN1;
         dispAN2 = coinsDispTmpAN2;
         dispAN3 = coinsDispTmpAN3;

@@ -77,7 +77,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports rLEDA1]
 set_property PACKAGE_PIN H2 [get_ports rLEDB1]
 set_property IOSTANDARD LVCMOS33 [get_ports rLEDB1]
 
-set_property PACKAGE_PIN K2 [get_ports gLEDC1]
+set_property PACKAGE_PIN K2 [get_ports rLEDC1]
 set_property IOSTANDARD LVCMOS33 [get_ports rLEDC1]
 
 # JB:
@@ -97,7 +97,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports rLEDA2]
 set_property PACKAGE_PIN A17 [get_ports rLEDB2]
 set_property IOSTANDARD LVCMOS33 [get_ports rLEDB2]
 
-set_property PACKAGE_PIN C15 [get_ports gLEDC2]
+set_property PACKAGE_PIN C15 [get_ports rLEDC2]
 set_property IOSTANDARD LVCMOS33 [get_ports rLEDC2]
 
 # JC:
@@ -117,7 +117,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports rLEDA3]
 set_property PACKAGE_PIN M19 [get_ports rLEDB3]
 set_property IOSTANDARD LVCMOS33 [get_ports rLEDB3]
 
-set_property PACKAGE_PIN P17 [get_ports gLEDC3]
+set_property PACKAGE_PIN P17 [get_ports rLEDC3]
 set_property IOSTANDARD LVCMOS33 [get_ports rLEDC3]
 
 # BOARD LEDS:

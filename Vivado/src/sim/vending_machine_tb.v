@@ -1,4 +1,6 @@
-//`include "vending_machine.v"
+`include "../hdl/vending_machine.v"
+`include "../hdl/num_to_7SD.v"
+`include "../hdl/num_to_coins.v"
 
 module vending_machine_tb();
 
@@ -19,6 +21,7 @@ reg dollar;
 reg five;
 reg cancelReset;
 reg coinsDisp;
+reg clk;
 
 wire gLEDA1;
 wire rLEDA1;
@@ -47,7 +50,8 @@ wire dLEDC2;
 wire gLEDC3;
 wire rLEDC3;
 wire dLEDC3;
-wire [31:0] board7SD;
+wire [3:0] anx;
+wire [7:0] value;
 
 vending_machine #(0) machine(
     .A1(A1),
@@ -67,6 +71,7 @@ vending_machine #(0) machine(
     .five(five),
     .cancelReset(cancelReset),
     .coinsDisp(coinsDisp),
+    .clk(clk),
     .gLEDA1(gLEDA1),
     .rLEDA1(rLEDA1),
     .dLEDA1(dLEDA1),
@@ -94,86 +99,97 @@ vending_machine #(0) machine(
     .gLEDC3(gLEDC3),
     .rLEDC3(rLEDC3),
     .dLEDC3(dLEDC3),
-    .board7SD(board7SD)
+    .anx(anx),
+    .value(value)
     );
 
 initial begin
     //$dumpfile("out.vcd");
     //$dumpvars(0, machine);
 
-    $monitor("time = %0d, board7SD = %0b", $time, board7SD);
+    $monitor("A1 %0b%0b A2 %0b%0b A3 %0b%0b\nB1 %0b%0b B2 %0b%0b B3 %0b%0b\nC1 %0b%0b C2 %0b%0b C3 %0b%0b\n\nA1 %0b A2 %0b A3 %0b B1 %0b B2 %0b B3 %0b C1 %0b C2 %0b C3 %0b", rLEDA1, gLEDA1, rLEDA2, gLEDA2, rLEDA3, gLEDA3, rLEDB1, gLEDB1, rLEDB2, gLEDB2, rLEDB3, gLEDB3, rLEDC1, gLEDC1, rLEDC2, gLEDC2, rLEDC3, gLEDC3, dLEDA1, dLEDA2, dLEDA3, dLEDB1, dLEDB2, dLEDB3, dLEDC1, dLEDC2, dLEDC3);
     
-    $display("A1 = 1");
+    // check all prices
     #1 A1 = 1;
+    $display("\nA1 = 1");
     #1 A1 = 0;
     
-    /*
-    $display("A2 = 1");
     #1 A2 = 1;
+    $display("A2 = 1");
     #1 A2 = 0;
     
-    $display("B2 = 1");
+    #1 A3 = 1;
+    $display("A3 = 1");
+    #1 A3 = 0;
+    
+    #1 B1 = 1;
+    $display("B1 = 1");
+    #1 B1 = 0;
+    
     #1 B2 = 1;
+    $display("B2 = 1");
     #1 B2 = 0;
     
-    $display("C3 = 1");
+    #1 B3 = 1;
+    $display("B3 = 1");
+    #1 B3 = 0;
+    
+    #1 C1 = 1;
+    $display("C1 = 1");
+    #1 C1 = 0;
+    
+    #1 C2 = 1;
+    $display("C2 = 1");
+    #1 C2 = 0;
+    
+    /*
+    #1 coinsDisp = 1;
+    $display("coinsDisp = 1");
+    #1 coinsDisp = 0;
+    //$display("coinsDisp = 0");
+    #1;
+    */
+    
     #1 C3 = 1;
+    $display("C3 = 1");
     #1 C3 = 0;
-    */
     
-    $display("quarter = 1");
-    #1 quarter = 1;
-    #1 quarter = 0;
+    #1 nickel = 1;
+        $display("nickel = 1");
+        #1 nickel = 0;
     
-    /*
-    $display("A1 = 1");
-    #1 A1 = 1;
-    #1 A1 = 0;
-    */
-    
-    $display("dollar = 1");
-    #1 dollar = 1;
-    #1 dollar = 0;
-    
-    $display("dollar = 1");
-    #1 dollar = 1;
-    #1 dollar = 0;
-    
-    $display("dollar = 1");
-    #1 dollar = 1;
-    #1 dollar = 0;
-    
-    $display("dollar = 1");
-    #1 dollar = 1;
-    #1 dollar = 0;
-    
-    $display("dollar = 1");
-    #1 dollar = 1;
-    #1 dollar = 0;
-    
-    $display("coinsDisp = 1");
-    #1 coinsDisp = 1;
-    #1 coinsDisp = 0;
-
-    /*
-    $display("A1 = 1");
-    #1 A1 = 1;
-    #1 A1 = 0;
-
-    $display("coinsDisp = 1");
-    #1 coinsDisp = 1;
-    #1 coinsDisp = 0;
-    */
-
-    $display("cancelReset = 1");
     #1 cancelReset = 1;
+    $display("cancelReset = 1");
     #1 cancelReset = 0;
     
-    /*
-    $display("coinsDisp = 1");
-    #1 coinsDisp = 1;
-    #1 coinsDisp = 0;
-    */
+    #1 A1 = 1;
+    $display("A1 = 1");
+    #1 A1 = 0;
+    
+    // insert coins
+    #1 nickel = 1;
+    $display("nickel = 1");
+    #1 nickel = 0;
+    
+    #1 nickel = 1;
+    $display("nickel = 1");
+    #1 nickel = 0;
+    
+    #1 A1 = 1;
+    $display("A1 = 1");
+    #1 A1 = 0;
+    
+    #1 nickel = 1;
+    $display("nickel = 1");
+    #1 nickel = 0;
+    
+    #1 dollar = 1;
+        $display("dollar = 1");
+        #1 dollar = 0;
+        
+        #1 A1 = 1;
+            $display("A1 = 1");
+            #1 A1 = 0;
     
     #1000 $finish;
 end
