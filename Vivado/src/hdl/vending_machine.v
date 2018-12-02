@@ -58,22 +58,22 @@ reg [7:0] dispAN1;
 reg [7:0] dispAN2;
 reg [7:0] dispAN3;
 
-reg [8:0] priceA1 = 100;
-reg [8:0] priceA2 = 0;
-reg [8:0] priceA3 = 125;
-reg [8:0] priceB1 = 175;
-reg [8:0] priceB2 = 225;
-reg [8:0] priceB3 = 250;
-reg [8:0] priceC1 = 100;
-reg [8:0] priceC2 = 325;
-reg [8:0] priceC3 = 375;
+reg [8:0] priceA1;
+reg [8:0] priceA2;
+reg [8:0] priceA3;
+reg [8:0] priceB1;
+reg [8:0] priceB2;
+reg [8:0] priceB3;
+reg [8:0] priceC1;
+reg [8:0] priceC2;
+reg [8:0] priceC3;
 
-reg [8:0] maxMoney = 500;
-reg [8:0] totalMoney = 0;
-reg [8:0] change = 0;
-reg [8:0] coins = 0;   // integer value showing each coin amount
+reg [8:0] maxMoney;
+reg [8:0] totalMoney;
+reg [8:0] change;
+reg [8:0] coins;   // integer value showing each coin amount
 
-reg [7:0] select = 8'hx;    // selected item code (A1, A2, A3, etc.)
+reg [7:0] select;    // selected item code (A1, A2, A3, etc.)
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -160,6 +160,26 @@ end
 
 assign anx = en_an;
 assign value = valx;
+
+initial begin
+
+    priceA1 = 100;
+    priceA2 = 0;
+    priceA3 = 125;
+    priceB1 = 175;
+    priceB2 = 225;
+    priceB3 = 250;
+    priceC1 = 100;
+    priceC2 = 325;
+    priceC3 = 375;
+
+    maxMoney = 500;
+    totalMoney = 0;
+    change = 0;
+    coins = 0;   // integer value showing each coin amount
+
+    select = 8'hx;    // selected item code (A1, A2, A3, etc.)
+end
 
 always @(*) begin
 
