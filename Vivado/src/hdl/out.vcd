@@ -1,0 +1,169 @@
+$date
+	Fri Nov 30 15:01:12 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module vending_machine_tb $end
+$scope module machine $end
+$var wire 1 ! A1 $end
+$var wire 1 " A2 $end
+$var wire 1 # A3 $end
+$var wire 1 $ B1 $end
+$var wire 1 % B2 $end
+$var wire 1 & B3 $end
+$var wire 1 ' C1 $end
+$var wire 1 ( C2 $end
+$var wire 1 ) C3 $end
+$var wire 32 * board7SD [31:0] $end
+$var wire 1 + cancelReset $end
+$var wire 1 , coinsDisp $end
+$var wire 1 - dime $end
+$var wire 1 . dollar $end
+$var wire 1 / fifty $end
+$var wire 1 0 five $end
+$var wire 1 1 nickel $end
+$var wire 1 2 quarter $end
+$var wire 32 3 tmpDisp [31:0] $end
+$var wire 9 4 tmpCoins [8:0] $end
+$var wire 1 5 rLEDC3 $end
+$var wire 1 6 rLEDC2 $end
+$var wire 1 7 rLEDC1 $end
+$var wire 1 8 rLEDB3 $end
+$var wire 1 9 rLEDB2 $end
+$var wire 1 : rLEDB1 $end
+$var wire 1 ; rLEDA3 $end
+$var wire 1 < rLEDA2 $end
+$var wire 1 = rLEDA1 $end
+$var wire 1 > gLEDC3 $end
+$var wire 1 ? gLEDC2 $end
+$var wire 1 @ gLEDC1 $end
+$var wire 1 A gLEDB3 $end
+$var wire 1 B gLEDB2 $end
+$var wire 1 C gLEDB1 $end
+$var wire 1 D gLEDA3 $end
+$var wire 1 E gLEDA2 $end
+$var wire 1 F gLEDA1 $end
+$var reg 9 G change [8:0] $end
+$var reg 9 H coins [8:0] $end
+$var reg 32 I coinsDispTmp [31:0] $end
+$var reg 1 J decimal $end
+$var reg 32 K display [31:0] $end
+$var reg 9 L maxMoney [8:0] $end
+$var reg 14 M num [13:0] $end
+$var reg 9 N priceA1 [8:0] $end
+$var reg 9 O priceA2 [8:0] $end
+$var reg 9 P priceA3 [8:0] $end
+$var reg 9 Q priceB1 [8:0] $end
+$var reg 9 R priceB2 [8:0] $end
+$var reg 9 S priceB3 [8:0] $end
+$var reg 9 T priceC1 [8:0] $end
+$var reg 9 U priceC2 [8:0] $end
+$var reg 9 V priceC3 [8:0] $end
+$var reg 9 W totalMoney [8:0] $end
+$scope module toCoins $end
+$var wire 9 X intNum [8:0] $end
+$var wire 14 Y value [13:0] $end
+$var reg 14 Z coins [13:0] $end
+$var reg 4 [ dimes [3:0] $end
+$var reg 4 \ dollars [3:0] $end
+$var reg 4 ] nickels [3:0] $end
+$var reg 9 ^ number [8:0] $end
+$var reg 4 _ quarters [3:0] $end
+$upscope $end
+$scope module toDisp $end
+$var wire 1 J decimal $end
+$var wire 14 ` intNum [13:0] $end
+$var wire 32 a sevenSeg [31:0] $end
+$var reg 32 b display [31:0] $end
+$var reg 4 c hundreds [3:0] $end
+$var reg 14 d number [13:0] $end
+$var reg 4 e ones [3:0] $end
+$var reg 8 f sseg [7:0] $end
+$var reg 4 g tens [3:0] $end
+$var reg 4 h thousands [3:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx h
+bx g
+bx f
+bx e
+bx d
+bx c
+bx b
+bx a
+bx `
+bx _
+bx ^
+bx ]
+bx \
+bx [
+bx Z
+bx Y
+bx X
+bx W
+b101110111 V
+b101000101 U
+b1100100 T
+b11111010 S
+b11100001 R
+b10101111 Q
+b1111101 P
+b0 O
+b1100100 N
+bx M
+bx L
+bx K
+xJ
+bx I
+bx H
+bx G
+xF
+0E
+xD
+xC
+xB
+xA
+x@
+x?
+x>
+0=
+1<
+0;
+0:
+09
+08
+07
+06
+05
+bx 4
+bx 3
+x2
+x1
+x0
+x/
+x.
+x-
+z,
+x+
+bx *
+x)
+x(
+x'
+x&
+x%
+x$
+x#
+x"
+x!
+$end
+#5000
+1!
+#1005000
