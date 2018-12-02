@@ -50,8 +50,8 @@ module vending_machine(
     output wire [7:0] value
     );
 
-reg [7:0] valx = 8'b10000001;
-reg [3:0] en_an = 4'b0;
+reg [7:0] valx;
+reg [3:0] en_an;
 
 reg [7:0] dispAN0 = 8'b10000001;    // LSB
 reg [7:0] dispAN1 = 8'b10000001;
@@ -106,23 +106,23 @@ assign dLEDC2 = (select == 8'hc2) ? 1'b1 : 1'b0;
 assign dLEDC3 = (select == 8'hc3) ? 1'b1 : 1'b0;
 
 // temporary registers for instantiated modules
-reg [13:0] num = 14'b0; // holds integer value to print (change or coins)
-reg decimal = 0;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
-reg negative = 0;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
+reg [13:0] num; // holds integer value to print (change or coins)
+reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
+reg negative;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
 
-wire [7:0] tmpDispAN0 = 8'b10000001;    // LSB
-wire [7:0] tmpDispAN1 = 8'b10000001;
-wire [7:0] tmpDispAN2 = 8'b10000001;
-wire [7:0] tmpDispAN3 = 8'b10000001;    // MSB
+wire [7:0] tmpDispAN0;  // LSB
+wire [7:0] tmpDispAN1;
+wire [7:0] tmpDispAN2;
+wire [7:0] tmpDispAN3;  // MSB
 
-wire [13:0] tmpCoins = 14'b0;   // holder for change in coins (num_to_coins); 14 bits for decimal 9999
+wire [13:0] tmpCoins;   // holder for change in coins (num_to_coins); 14 bits for decimal 9999
 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sSegAN0(tmpDispAN0), .sSegAN1(tmpDispAN1), .sSegAN2(tmpDispAN2), .sSegAN3(tmpDispAN3));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
 
 parameter N = 17;
 reg [N+1:0] counter = 0;
-wire [1:0] clkdiv = 2'b0;
+wire [1:0] clkdiv;
 
 always @(posedge clk) begin
 
@@ -156,7 +156,7 @@ end
 assign anx = en_an;
 assign value = valx;
 
-wire coinsDisp = 0;
+wire coinsDisp;
 debounce coinsDispSW(.sig_out(coinsDisp), .button_n(coinsDisp_n), .clk_100_MHz(clk));
 
 /*
@@ -233,6 +233,7 @@ end
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or negedge coinsDisp) begin
 
+    /*
     if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
     
         decimal = 1;
@@ -447,8 +448,10 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN2 = tmpDispAN2;
         dispAN3 = tmpDispAN3;
     end
+    */
 
-    else if (nickel || dime || quarter || fifty || dollar || five) begin
+    if (nickel || dime || quarter || fifty || dollar || five) begin
+    //else if (nickel || dime || quarter || fifty || dollar || five) begin
     
         decimal = 1;
         negative = 0;
@@ -574,6 +577,221 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         end
     end
 
+    else if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
+    
+        decimal = 1;
+        negative = 0;
+    
+        if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+        
+                if (A1) begin
+                
+                    num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
+                end
+                
+                else if (A2) begin
+                        
+                    num = priceA2;
+                end
+                
+                else if (A3) begin
+                                
+                    num = priceA3;
+                end
+                
+                else if (B1) begin
+                                        
+                    num = priceB1;
+                end
+                
+                else if (B2) begin
+                                                
+                    num = priceB2;
+                end
+                
+                else if (B3) begin
+                                                        
+                    num = priceB3;
+                end
+        
+                else if (C1) begin
+                                        
+                    num = priceC1;
+                end
+                
+                else if (C2) begin
+                                                
+                    num = priceC2;
+                end
+                
+                else if (C3) begin
+                                                        
+                    num = priceC3;
+                end
+        end
+        
+        else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
+    
+            if (A1) begin
+            
+                if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
+                
+                    change = totalMoney - priceA1;
+                    num = change;   // loads tmpDisp with change; will print when display = tmpDisp
+                    select = 8'ha1;
+                end
+                
+                else begin
+                
+                    negative = 1;
+                    num = priceA1 - totalMoney; // loads tmpDisp with required change; will print when display = tmpDisp
+                end
+            end
+            
+            else if (A2) begin
+                    
+                if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
+                
+                    change = totalMoney - priceA2;
+                    num = change;
+                    select = 8'ha2;
+                end
+                        
+                else begin
+                        
+                    negative = 1;
+                    num = priceA2 - totalMoney;
+                end
+            end
+            
+            else if (A3) begin
+                            
+                if ((totalMoney >= priceA3) && (priceA3 != 1'b0)) begin
+            
+                    change = totalMoney - priceA3;
+                    num = change;
+                    select = 8'ha3;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceA3 - totalMoney;
+                end
+            end
+            
+            else if (B1) begin
+                                    
+                if ((totalMoney >= priceB1) && (priceB1 != 1'b0)) begin
+            
+                    change = totalMoney - priceB1;
+                    num = change;
+                    select = 8'hb1;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceB1 - totalMoney;
+                end
+            end
+            
+            else if (B2) begin
+                                            
+                if ((totalMoney >= priceB2) && (priceB2 != 1'b0)) begin
+            
+                    change = totalMoney - priceB2;
+                    num = change;
+                    select = 8'hb2;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceB2 - totalMoney;
+                end
+            end
+            
+            else if (B3) begin
+                                                    
+                if ((totalMoney >= priceB3) && (priceB3 != 1'b0)) begin
+            
+                    change = totalMoney - priceB3;
+                    num = change;
+                    select = 8'hb3;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceB3 - totalMoney;
+                end
+            end
+    
+            else if (C1) begin
+                                    
+                if ((totalMoney >= priceC1) && (priceC1 != 1'b0)) begin
+            
+                    change = totalMoney - priceC1;
+                    num = change;
+                    select = 8'hc1;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceC1 - totalMoney;
+                end
+            end
+            
+            else if (C2) begin
+                                            
+                if ((totalMoney >= priceC2) && (priceC2 != 1'b0)) begin
+            
+                    change = totalMoney - priceC2;
+                    num = change;
+                    select = 8'hc2;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceC2 - totalMoney;
+                end
+            end
+            
+            else if (C3) begin
+                                                    
+                if ((totalMoney >= priceC3) && (priceC3 != 1'b0)) begin
+            
+                    change = totalMoney - priceC3;
+                    num = change;
+                    select = 8'hc3;
+                end
+            
+                else begin
+            
+                    negative = 1;
+                    num = priceC3 - totalMoney;
+                end
+            end
+    
+            if (select != 8'h0) begin   // reset if selection was made successfully
+            
+                totalMoney = 0;
+                change = 0;
+                coins = 0;
+            end
+    
+        end
+
+        //#1; // DEBUG
+        dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
+        dispAN1 = tmpDispAN1;
+        dispAN2 = tmpDispAN2;
+        dispAN3 = tmpDispAN3;
+    end
+
     else if (cancelReset) begin
     
         decimal = 1;
@@ -593,7 +811,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         change = 0;
         coins = 0;
         select = 8'h0;
-        //#1;
+        //#1;   // DEBUG
         dispAN0 = 8'b10000001;   // 0
         dispAN1 = 8'b10000001;   // 0
         dispAN2 = 8'b10000001;   // 0
@@ -604,12 +822,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
         decimal = 0;
         negative = 0;
-        /*
-        coinsDispTmpAN0 = dispAN0;  // save current 7SD to restore on negedge button press
-        coinsDispTmpAN1 = dispAN1;
-        coinsDispTmpAN2 = dispAN2;
-        coinsDispTmpAN3 = dispAN3;
-        */
         num = coins;    // loads tmpDisp with change in coins converted to 7SD format
         //#1; // DEBUG
         dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
