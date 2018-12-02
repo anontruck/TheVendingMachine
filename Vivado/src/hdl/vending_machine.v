@@ -452,7 +452,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN3 = tmpDispAN3;
     end
 
-    if (nickel || dime || quarter || fifty || dollar || five) begin
+    else if (nickel || dime || quarter || fifty || dollar || five) begin
     
         decimal = 1;
         negative = 0;
@@ -578,7 +578,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         end
     end
 
-    if (cancelReset) begin
+    else if (cancelReset) begin
     
         decimal = 1;
         negative = 0;
@@ -604,7 +604,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN3 = 8'b10000001;   // 0
     end
 
-    if (coinsDisp == 1'b0) begin 
+    else if (coinsDisp == 1'b0) begin 
     
         decimal = 0;
         negative = 0;
