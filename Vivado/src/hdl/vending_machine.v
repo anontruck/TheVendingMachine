@@ -105,10 +105,12 @@ assign dLEDC1 = (select == 8'hc1) ? 1'b1 : 1'b0;
 assign dLEDC2 = (select == 8'hc2) ? 1'b1 : 1'b0;
 assign dLEDC3 = (select == 8'hc3) ? 1'b1 : 1'b0;
 
+/*
 reg [7:0] coinsDispTmpAN0;    // to hold 7SD value when pressing coinsDisp
 reg [7:0] coinsDispTmpAN1;
 reg [7:0] coinsDispTmpAN2;
 reg [7:0] coinsDispTmpAN3;
+*/
 
 // temporary registers for instantiated modules
 reg [13:0] num; // holds integer value to print (change or coins)
@@ -233,7 +235,7 @@ always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
 end
 */
 
-always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or coinsDisp) begin
+always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or posedge coinsDisp) begin
 
     if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
     
@@ -606,10 +608,12 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
         decimal = 0;
         negative = 0;
+        /*
         coinsDispTmpAN0 = dispAN0;  // save current 7SD to restore on negedge button press
         coinsDispTmpAN1 = dispAN1;
         coinsDispTmpAN2 = dispAN2;
         coinsDispTmpAN3 = dispAN3;
+        */
         num = coins;    // loads tmpDisp with change in coins converted to 7SD format
         //#1; // DEBUG
         dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
@@ -618,6 +622,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN3 = tmpDispAN3;
     end
 
+    /*
     else if (coinsDisp == 1'b0) begin
     
         //#1; // DEBUG
@@ -626,6 +631,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN2 = coinsDispTmpAN2;
         dispAN3 = coinsDispTmpAN3;
     end
+    */
 
 end
 

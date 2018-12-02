@@ -1,6 +1,8 @@
+/*
 `include "../hdl/vending_machine.v"
 `include "../hdl/num_to_7SD.v"
 `include "../hdl/num_to_coins.v"
+*/
 
 module vending_machine_tb();
 
