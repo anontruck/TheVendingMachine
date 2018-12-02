@@ -18,6 +18,7 @@ module vending_machine(
     input wire five,
     input wire cancelReset,
     input wire coinsDisp,  // button to show current change in coins
+    input wire clk,
     output wire gLEDA1, // green LED for A1 - means inserted $ >= A1 price
     output wire rLEDA1, // red LED for A1 - means A1 is OOS
     output wire dLEDA1, // board LED for A1 - means A1 has been dispensed
@@ -45,11 +46,17 @@ module vending_machine(
     output wire gLEDC3,
     output wire rLEDC3,
     output wire dLEDC3,
-    output wire [31:0] board7SD    // FPGA board 7 segment display (4 digits) - for prices and change in $
+    output wire [3:0] anx,   // selects which 7-seg to write to
+    output wire [7:0] value
     );
 
-reg [31:0] display;
-assign board7SD = display;
+reg [7:0] valx;
+reg [3:0] en_an;
+
+reg [7:0] dispAN0;
+reg [7:0] dispAN1;
+reg [7:0] dispAN2;
+reg [7:0] dispAN3;
 
 reg [8:0] priceA1 = 100;
 reg [8:0] priceA2 = 0;
@@ -98,17 +105,61 @@ assign dLEDC1 = (select == 8'hc1) ? 1'b1 : 1'b0;
 assign dLEDC2 = (select == 8'hc2) ? 1'b1 : 1'b0;
 assign dLEDC3 = (select == 8'hc3) ? 1'b1 : 1'b0;
 
-reg [31:0] coinsDispTmp;    // to hold 7SD value when pressing coinsDisp
+//reg [31:0] coinsDispTmp;    // to hold 7SD value when pressing coinsDisp
+reg [7:0] coinsDispTmpAN0;
+reg [7:0] coinsDispTmpAN1;
+reg [7:0] coinsDispTmpAN2;
+reg [7:0] coinsDispTmpAN3;
 
 // temporary registers for instantiated modules
 reg [13:0] num; // holds integer value to print (change or coins)
 reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
 reg negative;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
-wire [31:0] tmpDisp; // holder for output before printing (num_to_7SD)
+
+wire [7:0] tmpDispAN0;
+wire [7:0] tmpDispAN1;
+wire [7:0] tmpDispAN2;
+wire [7:0] tmpDispAN3;
+
 wire [13:0] tmpCoins; // holder for change in coins (num_to_coins); 14 bits for decimal 9999
 
-num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sevenSeg(tmpDisp));
+num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sSegAN0(tmpDispAN0), .sSegAN1(tmpDispAN1), .sSegAN2(tmpDispAN2), .sSegAN3(tmpDispAN3));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
+
+parameter N = 17;
+reg [N+1:0] counter = 0;
+wire [1:0] clkdiv;
+
+// this will give us the frequency we want
+always @(posedge clk) begin
+    counter <= counter + 1;
+end
+
+assign clkdiv = counter[N+1:N];
+
+always @(*) begin
+    case(clkdiv)
+        2'b00 : begin
+            valx    <= dispAN0;
+            en_an   <= 4'b1110;
+        end
+        2'b01 : begin
+            valx    <= dispAN1;
+            en_an   <= 4'b1101;
+        end
+        2'b10 : begin
+            valx    <= dispAN2;
+            en_an   <= 4'b1011;
+        end
+        2'b11 : begin
+            valx    <= dispAN3;
+            en_an   <= 4'b0111;
+        end
+    endcase
+end
+
+assign anx = en_an;
+assign value = valx;
 
 always @(*) begin
 
@@ -320,7 +371,11 @@ always @(*) begin
     
         end
     
-        display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
+        //display = tmpDisp;  // shows price or change on 7SD, depending on which value was assigned to num above
+        dispAN0 = tmpDispAN0;
+        dispAN1 = tmpDispAN1;
+        dispAN2 = tmpDispAN2;
+        dispAN3 = tmpDispAN3;
     end
 
     if (nickel || dime || quarter || fifty || dollar || five) begin
@@ -340,7 +395,11 @@ always @(*) begin
             
                 totalMoney = totalMoney + 5;
                 num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
-                display = tmpDisp;
+                //display = tmpDisp;
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
             end
         end
                 
@@ -356,7 +415,11 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 10;
                 num = totalMoney;
-                display = tmpDisp;
+                //display = tmpDisp;
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
             end
         end
                 
@@ -372,7 +435,11 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 25;
                 num = totalMoney;
-                display = tmpDisp;
+                //display = tmpDisp;
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
             end
         end
                 
@@ -388,7 +455,11 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 50;
                 num = totalMoney;
-                display = tmpDisp;
+                //display = tmpDisp;
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
             end
         end
                 
@@ -404,7 +475,11 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 100;
                 num = totalMoney;
-                display = tmpDisp;
+                //display = tmpDisp;
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
             end
         end
                 
@@ -420,6 +495,11 @@ always @(*) begin
                     
                 totalMoney = totalMoney + 500;
                 num = totalMoney;
+                //display = tmpDisp;
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
             end
         end
     end
@@ -439,7 +519,11 @@ always @(*) begin
             num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
         end
         
-        display = tmpDisp;  // print change on 7SD
+        //display = tmpDisp;  // print change on 7SD
+        dispAN0 = tmpDispAN0;
+        dispAN1 = tmpDispAN1;
+        dispAN2 = tmpDispAN2;
+        dispAN3 = tmpDispAN3;
         totalMoney = 0; // reset
         change = 0;
         coins = 0;
@@ -450,14 +534,26 @@ always @(*) begin
     
         decimal = 0;
         negative = 0;
-        coinsDispTmp = display; // save current 7SD to restore on negedge button press
+        //coinsDispTmp = display; // save current 7SD to restore on negedge button press
+        coinsDispTmpAN0 = dispAN0;
+        coinsDispTmpAN1 = dispAN1;
+        coinsDispTmpAN2 = dispAN2;
+        coinsDispTmpAN3 = dispAN3;
         num = coins;    // loads tmpDisp with change in coins converted to 7SD format
-        display = tmpDisp;  // displays change in coins in 7SD format
+        //display = tmpDisp;  // displays change in coins in 7SD format
+        dispAN0 = tmpDispAN0;
+        dispAN1 = tmpDispAN1;
+        dispAN2 = tmpDispAN2;
+        dispAN3 = tmpDispAN3;
     end
 
     if (coinsDisp == 1'b0) begin
     
-        display = coinsDispTmp; // restore previously saved 7SD value
+        //display = coinsDispTmp; // restore previously saved 7SD value
+        dispAN0 = coinsDispTmpAN0;
+        dispAN1 = coinsDispTmpAN1;
+        dispAN2 = coinsDispTmpAN2;
+        dispAN3 = coinsDispTmpAN3;
     end
 
 end
