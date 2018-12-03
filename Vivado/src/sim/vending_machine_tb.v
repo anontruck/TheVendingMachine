@@ -113,84 +113,82 @@ initial begin
     $monitor("A1 %0b%0b A2 %0b%0b A3 %0b%0b\nB1 %0b%0b B2 %0b%0b B3 %0b%0b\nC1 %0b%0b C2 %0b%0b C3 %0b%0b\n\nA1 %0b A2 %0b A3 %0b B1 %0b B2 %0b B3 %0b C1 %0b C2 %0b C3 %0b", rLEDA1, gLEDA1, rLEDA2, gLEDA2, rLEDA3, gLEDA3, rLEDB1, gLEDB1, rLEDB2, gLEDB2, rLEDB3, gLEDB3, rLEDC1, gLEDC1, rLEDC2, gLEDC2, rLEDC3, gLEDC3, dLEDA1, dLEDA2, dLEDA3, dLEDB1, dLEDB2, dLEDB3, dLEDC1, dLEDC2, dLEDC3);
     
     // check all prices
-    /*
-    #1 A1 = 1;
-    $display("\nA1 = 1");
-    #1 A1 = 0;
+    #1 A1_n = 1;
+    $display("\nA1_n = 1");
+    #1 A1_n = 0;
     
-    #1 A2 = 1;
-    $display("A2 = 1");
-    #1 A2 = 0;
+    #1 A2_n = 1;
+    $display("A2_n = 1");
+    #1 A2_n = 0;
     
-    #1 A3 = 1;
-    $display("A3 = 1");
-    #1 A3 = 0;
+    #1 A3_n = 1;
+    $display("A3_n = 1");
+    #1 A3_n = 0;
     
-    #1 B1 = 1;
-    $display("B1 = 1");
-    #1 B1 = 0;
+    #1 B1_n = 1;
+    $display("B1_n = 1");
+    #1 B1_n = 0;
     
-    #1 B2 = 1;
-    $display("B2 = 1");
-    #1 B2 = 0;
+    #1 B2_n = 1;
+    $display("B2_n = 1");
+    #1 B2_n = 0;
     
-    #1 B3 = 1;
-    $display("B3 = 1");
-    #1 B3 = 0;
+    #1 B3_n = 1;
+    $display("B3_n = 1");
+    #1 B3_n = 0;
     
-    #1 C1 = 1;
-    $display("C1 = 1");
-    #1 C1 = 0;
+    #1 C1_n = 1;
+    $display("C1_n = 1");
+    #1 C1_n = 0;
     
-    #1 C2 = 1;
-    $display("C2 = 1");
-    #1 C2 = 0;
+    #1 C2_n = 1;
+    $display("C2_n = 1");
+    #1 C2_n = 0;
     
     #1 coinsDisp_n = 0;
     $display("coinsDisp_n = 0");
     #1 coinsDisp_n = 1;
     
-    #1 C3 = 1;
-    $display("C3 = 1");
-    #1 C3 = 0;
+    #1 C3_n = 1;
+    $display("C3_n = 1");
+    #1 C3_n = 0;
     
-    #1 nickel = 1;
-    $display("nickel = 1");
-    #1 nickel = 0;
+    #1 nickel_n = 1;
+    $display("nickel_n = 1");
+    #1 nickel_n = 0;
     
-    #1 cancelReset = 1;
-    $display("cancelReset = 1");
-    #1 cancelReset = 0;
+    #1 cancelReset_n = 1;
+    $display("cancelReset_n = 1");
+    #1 cancelReset_n = 0;
     
-    #1 A1 = 1;
-    $display("A1 = 1");
-    #1 A1 = 0;
+    #1 A1_n = 1;
+    $display("A1_n = 1");
+    #1 A1_n = 0;
     
     // insert coins
-    #1 nickel = 1;
-    $display("nickel = 1");
-    #1 nickel = 0;
+    #1 nickel_n = 1;
+    $display("nickel_n = 1");
+    #1 nickel_n = 0;
     
-    #1 nickel = 1;
-    $display("nickel = 1");
-    #1 nickel = 0;
+    #1 nickel_n = 1;
+    $display("nickel_n = 1");
+    #1 nickel_n = 0;
     
-    #1 A1 = 1;
-    $display("A1 = 1");
-    #1 A1 = 0;
+    #1 A1_n = 1;
+    $display("A1_n = 1");
+    #1 A1_n = 0;
     
-    #1 nickel = 1;
-    $display("nickel = 1");
-    #1 nickel = 0;
+    #1 nickel_n = 1;
+    $display("nickel_n = 1");
+    #1 nickel_n = 0;
     
-    #1 dollar = 1;
-    $display("dollar = 1");
-    #1 dollar = 0;
+    #1 dollar_n = 1;
+    $display("dollar_n = 1");
+    #1 dollar_n = 0;
     
-    #1 A1 = 1;
-    $display("A1 = 1");
-    #1 A1 = 0;
-    */
+    #1 A1_n = 1;
+    $display("A1_n = 1");
+    #1 A1_n = 0;
     
     #1000 $finish;
 end
