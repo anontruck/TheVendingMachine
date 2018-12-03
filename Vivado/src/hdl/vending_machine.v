@@ -493,18 +493,20 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                 end
             end
     
+            /*
             if (select != 8'h0) begin   // reset if selection was made successfully
             
                 totalMoney = 0;
                 change = 0;
                 coins = 0;
             end
+            */
             
             dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
-                    dispAN1 = tmpDispAN1;
-                    dispAN2 = tmpDispAN2;
-                    dispAN3 = tmpDispAN3;
-    
+            dispAN1 = tmpDispAN1;
+            dispAN2 = tmpDispAN2;
+            dispAN3 = tmpDispAN3;
+            
         end
 
     else if (nickel || dime || quarter || fifty || dollar || five) begin
