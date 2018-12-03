@@ -27,11 +27,11 @@ set_property IOSTANDARD LVCMOS33 [get_ports C2]
 set_property PACKAGE_PIN W13 [get_ports C3]
 set_property IOSTANDARD LVCMOS33 [get_ports C3]
 
-set_property PACKAGE_PIN V16 [get_ports cancelReset]
-set_property IOSTANDARD LVCMOS33 [get_ports cancelReset]
-
-set_property PACKAGE_PIN V17 [get_ports coinsDisp]
+set_property PACKAGE_PIN V16 [get_ports coinsDisp]
 set_property IOSTANDARD LVCMOS33 [get_ports coinsDisp]
+
+set_property PACKAGE_PIN V17 [get_ports cancelReset]
+set_property IOSTANDARD LVCMOS33 [get_ports cancelReset]
 
 # BUTTONS:
 

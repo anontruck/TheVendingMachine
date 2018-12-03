@@ -72,7 +72,7 @@ reg [8:0] totalMoney = 0;
 reg [8:0] change = 0;
 reg [8:0] coins = 0;   // integer value showing each coin amount
 
-reg [7:0] select = 8'h0;    // selected item code (A1, A2, A3, etc.)
+reg [7:0] select = 8'b0;    // selected item code (A1, A2, A3, etc.)
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -114,7 +114,7 @@ wire [7:0] tmpDispAN1;
 wire [7:0] tmpDispAN2;
 wire [7:0] tmpDispAN3;  // MSB
 
-wire [13:0] tmpCoins;   // holder for change in coins (num_to_coins); 14 bits for decimal 9999
+wire [13:0] tmpCoins = 14'b0;   // holder for change in coins (num_to_coins); 14 bits for decimal 9999
 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sSegAN0(tmpDispAN0), .sSegAN1(tmpDispAN1), .sSegAN2(tmpDispAN2), .sSegAN3(tmpDispAN3));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
@@ -252,101 +252,76 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
             if ((totalMoney + 5) > maxMoney) begin
                 
-                num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
-                coins = coins + tmpCoins;
+                coins = coins + 1;
             end
             
             else begin
             
                 totalMoney = totalMoney + 5;
                 num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
-                //#1; // DEBUG
-                dispAN0 = tmpDispAN0;
-                dispAN1 = tmpDispAN1;
-                dispAN2 = tmpDispAN2;
-                dispAN3 = tmpDispAN3;
             end
         end
                 
         else if (dime) begin
     
             if ((totalMoney + 10) > maxMoney) begin
-                    
-                num = 10;
-                coins = coins + tmpCoins;
+
+                coins = coins + 10;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 10;
                 num = totalMoney;
-                //#1; // DEBUG
-                dispAN0 = tmpDispAN0;
-                dispAN1 = tmpDispAN1;
-                dispAN2 = tmpDispAN2;
-                dispAN3 = tmpDispAN3;
             end
         end
                 
         else if (quarter) begin
     
             if ((totalMoney + 25) > maxMoney) begin
-                    
-                num = 25;
-                coins = coins + tmpCoins;
+
+                coins = coins + 100;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 25;
                 num = totalMoney;
-                //#1; // DEBUG
-                dispAN0 = tmpDispAN0;
-                dispAN1 = tmpDispAN1;
-                dispAN2 = tmpDispAN2;
-                dispAN3 = tmpDispAN3;
             end
         end
                 
         else if (dollar) begin
     
             if ((totalMoney + 100) > maxMoney) begin
-                    
-                num = 100;
-                coins = coins + tmpCoins;
+
+                coins = coins + 1000;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 100;
                 num = totalMoney;
-                //#1; // DEBUG
-                dispAN0 = tmpDispAN0;
-                dispAN1 = tmpDispAN1;
-                dispAN2 = tmpDispAN2;
-                dispAN3 = tmpDispAN3;
             end
         end
                 
         else if (five) begin
     
             if ((totalMoney + 500) > maxMoney) begin
-                    
-                num = 500;
-                coins = coins + tmpCoins;
+
+                coins = coins + 5000;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 500;
                 num = totalMoney;
-                //#1; // DEBUG
-                dispAN0 = tmpDispAN0;
-                dispAN1 = tmpDispAN1;
-                dispAN2 = tmpDispAN2;
-                dispAN3 = tmpDispAN3;
             end
         end
+        
+        dispAN0 = tmpDispAN0;
+        dispAN1 = tmpDispAN1;
+        dispAN2 = tmpDispAN2;
+        dispAN3 = tmpDispAN3;
     end
 
     else if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
@@ -574,7 +549,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         totalMoney = 0; // reset
         change = 0;
         coins = 0;
-        select = 8'h0;
+        select = 8'b0;
         //#1; // DEBUG
         dispAN0 = 8'b10000001;   // 0
         dispAN1 = 8'b10000001;   // 0
