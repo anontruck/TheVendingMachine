@@ -2,7 +2,7 @@
 `include "../hdl/vending_machine.v"
 `include "../hdl/num_to_7SD.v"
 `include "../hdl/num_to_coins.v"
-`include "../hdl/debounce.v"
+//`include "../hdl/debounce.v"
 
 
 module vending_machine_tb();
@@ -16,11 +16,11 @@ reg B3;
 reg C1;
 reg C2;
 reg C3;
-reg nickel_n = 1;
-reg dime_n = 1;
-reg quarter_n = 1;
-reg dollar_n = 1;
-reg five_n = 1;
+reg nickel = 1;
+reg dime = 1;
+reg quarter = 1;
+reg dollar = 1;
+reg five = 1;
 reg cancelReset;
 reg coinsDisp;
 reg clk;
@@ -110,6 +110,7 @@ initial begin
 
     $monitor("A1 %0b%0b A2 %0b%0b A3 %0b%0b\nB1 %0b%0b B2 %0b%0b B3 %0b%0b\nC1 %0b%0b C2 %0b%0b C3 %0b%0b\n\nA1 %0b A2 %0b A3 %0b B1 %0b B2 %0b B3 %0b C1 %0b C2 %0b C3 %0b", rLEDA1, gLEDA1, rLEDA2, gLEDA2, rLEDA3, gLEDA3, rLEDB1, gLEDB1, rLEDB2, gLEDB2, rLEDB3, gLEDB3, rLEDC1, gLEDC1, rLEDC2, gLEDC2, rLEDC3, gLEDC3, dLEDA1, dLEDA2, dLEDA3, dLEDB1, dLEDB2, dLEDB3, dLEDC1, dLEDC2, dLEDC3);
     
+    /*
     // check all prices
     #1 A1 = 1;
     $display("\nA1 = 1");
@@ -187,6 +188,7 @@ initial begin
     #1 A1 = 1;
     $display("A1 = 1");
     #1 A1 = 0;
+    */
     
     #1000 $finish;
 end
