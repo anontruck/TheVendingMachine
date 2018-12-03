@@ -139,14 +139,10 @@ initial begin
     #1 C2 = 1;
     $display("C2 = 1");
     #1 C2 = 0;
-    
-    /*
+
     #1 coinsDisp = 1;
     $display("coinsDisp = 1");
     #1 coinsDisp = 0;
-    //$display("coinsDisp = 0");
-    #1;
-    */
     
     #1 C3 = 1;
     $display("C3 = 1");
@@ -184,12 +180,16 @@ initial begin
     #1 nickel = 0;
     
     #1 dollar = 1;
-        $display("dollar = 1");
-        #1 dollar = 0;
-        
-        #1 A1 = 1;
-            $display("A1 = 1");
-            #1 A1 = 0;
+    $display("dollar = 1");
+    #1 dollar = 0;
+    
+    #1 A1 = 1;
+    $display("A1 = 1");
+    #1 A1 = 0;
+    
+    #1 coinsDisp = 1;
+    $display("coinsDisp = 1");
+    #1 coinsDisp = 0;
     
     #1000 $finish;
 end

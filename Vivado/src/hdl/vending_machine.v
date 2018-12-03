@@ -431,16 +431,9 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                     num = priceC3 - totalMoney;
                 end
             end
-    
-            if (select != 8'h0) begin   // reset if selection was made successfully
-            
-                totalMoney = 0;
-                change = 0;
-                coins = 0;
-            end
         end
 
-        //#1; // DEBUG
+        #1; // DEBUG
         dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
         dispAN1 = tmpDispAN1;
         dispAN2 = tmpDispAN2;
@@ -456,15 +449,16 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         
             if ((totalMoney + 5) > maxMoney) begin
                 
-                num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
-                coins = coins + tmpCoins;
+                //num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
+                //coins = coins + tmpCoins;
+                coins = coins + 1;
             end
             
             else begin
             
                 totalMoney = totalMoney + 5;
                 num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
-                //#1; // DEBUG
+                #1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -476,15 +470,16 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 10) > maxMoney) begin
                     
-                num = 10;
-                coins = coins + tmpCoins;
+                //num = 10;
+                //coins = coins + tmpCoins;
+                coins = coins + 10;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 10;
                 num = totalMoney;
-                //#1; // DEBUG
+                #1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -496,15 +491,16 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 25) > maxMoney) begin
                     
-                num = 25;
-                coins = coins + tmpCoins;
+                //num = 25;
+                //coins = coins + tmpCoins;
+                coins = coins + 100;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 25;
                 num = totalMoney;
-                //#1; // DEBUG
+                #1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -516,15 +512,16 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 50) > maxMoney) begin
                     
-                num = 50;
-                coins = coins + tmpCoins;
+                //num = 50;
+                //coins = coins + tmpCoins;
+                coins = coins + 200;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 50;
                 num = totalMoney;
-                //#1; // DEBUG
+                #1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -536,15 +533,16 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 100) > maxMoney) begin
                     
-                num = 100;
-                coins = coins + tmpCoins;
+                //num = 100;
+                //coins = coins + tmpCoins;
+                coins = coins + 1000;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 100;
                 num = totalMoney;
-                //#1; // DEBUG
+                #1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -556,15 +554,16 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 500) > maxMoney) begin
                     
-                num = 500;
-                coins = coins + tmpCoins;
+                //num = 500;
+                //coins = coins + tmpCoins;
+                coins = coins + 5000;
             end
                     
             else begin
                     
                 totalMoney = totalMoney + 500;
                 num = totalMoney;
-                //#1; // DEBUG
+                #1; // DEBUG
                 dispAN0 = tmpDispAN0;
                 dispAN1 = tmpDispAN1;
                 dispAN2 = tmpDispAN2;
@@ -592,7 +591,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         change = 0;
         coins = 0;
         select = 8'h0;
-        //#1;
+        #1; // DEBUG
         dispAN0 = 8'b10000001;   // 0
         dispAN1 = 8'b10000001;   // 0
         dispAN2 = 8'b10000001;   // 0
@@ -600,15 +599,11 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     end
 
     else if (coinsDisp) begin 
-    
+
         decimal = 0;
         negative = 0;
-        coinsDispTmpAN0 = dispAN0;  // save current 7SD to restore on negedge button press
-        coinsDispTmpAN1 = dispAN1;
-        coinsDispTmpAN2 = dispAN2;
-        coinsDispTmpAN3 = dispAN3;
         num = coins;    // loads tmpDisp with change in coins converted to 7SD format
-        //#1; // DEBUG
+        #5; // DEBUG
         dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
         dispAN1 = tmpDispAN1;
         dispAN2 = tmpDispAN2;
