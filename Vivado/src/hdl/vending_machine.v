@@ -239,14 +239,14 @@ always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
 end
 */
 
-always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or negedge nickel or negedge dime or negedge quarter or negedge dollar or negedge five or posedge cancelReset or posedge coinsDisp) begin
+always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge dollar or posedge five or posedge cancelReset or posedge coinsDisp) begin
 
-    if (~nickel || ~dime || ~quarter || ~dollar || ~five) begin
+    if (nickel || dime || quarter || dollar || five) begin
     
         decimal = 1;
         negative = 0;
     
-        if (~nickel) begin
+        if (nickel) begin
         
             if ((totalMoney + 5) > maxMoney) begin
                 
@@ -266,7 +266,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             end
         end
                 
-        else if (~dime) begin
+        else if (dime) begin
     
             if ((totalMoney + 10) > maxMoney) begin
                     
@@ -286,7 +286,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             end
         end
                 
-        else if (~quarter) begin
+        else if (quarter) begin
     
             if ((totalMoney + 25) > maxMoney) begin
                     
@@ -306,7 +306,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             end
         end
                 
-        else if (~dollar) begin
+        else if (dollar) begin
     
             if ((totalMoney + 100) > maxMoney) begin
                     
@@ -326,7 +326,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
             end
         end
                 
-        else if (~five) begin
+        else if (five) begin
     
             if ((totalMoney + 500) > maxMoney) begin
                     
