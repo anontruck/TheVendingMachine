@@ -27,34 +27,36 @@ set_property IOSTANDARD LVCMOS33 [get_ports C2]
 set_property PACKAGE_PIN W13 [get_ports C3]
 set_property IOSTANDARD LVCMOS33 [get_ports C3]
 
-set_property PACKAGE_PIN V16 [get_ports coinsDisp]
-set_property IOSTANDARD LVCMOS33 [get_ports coinsDisp]
+set_property PACKAGE_PIN W14 [get_ports nickel]
+set_property IOSTANDARD LVCMOS33 [get_ports nickel]
+
+set_property PACKAGE_PIN V15 [get_ports dime]
+set_property IOSTANDARD LVCMOS33 [get_ports dime]
+
+set_property PACKAGE_PIN W15 [get_ports quarter]
+set_property IOSTANDARD LVCMOS33 [get_ports quarter]
+
+set_property PACKAGE_PIN W17 [get_ports fifty]
+set_property IOSTANDARD LVCMOS33 [get_ports fifty]
+
+set_property PACKAGE_PIN W16 [get_ports dollar]
+set_property IOSTANDARD LVCMOS33 [get_ports dollar]
+
+set_property PACKAGE_PIN V16 [get_ports five]
+set_property IOSTANDARD LVCMOS33 [get_ports five]
 
 set_property PACKAGE_PIN V17 [get_ports cancelReset]
 set_property IOSTANDARD LVCMOS33 [get_ports cancelReset]
 
 # BUTTONS:
 
-set_property PACKAGE_PIN T18 [get_ports nickel_n]
-set_property IOSTANDARD LVCMOS33 [get_ports nickel_n]
-
-set_property PACKAGE_PIN T17 [get_ports dime_n]
-set_property IOSTANDARD LVCMOS33 [get_ports dime_n]
-
-set_property PACKAGE_PIN U17 [get_ports quarter_n]
-set_property IOSTANDARD LVCMOS33 [get_ports quarter_n]
-
-set_property PACKAGE_PIN W19 [get_ports dollar_n]
-set_property IOSTANDARD LVCMOS33 [get_ports dollar_n]
-
-set_property PACKAGE_PIN U18 [get_ports five_n]
-set_property IOSTANDARD LVCMOS33 [get_ports five_n]
+set_property PACKAGE_PIN U18 [get_ports coinsDisp]
+set_property IOSTANDARD LVCMOS33 [get_ports coinsDisp]
 
 # CLK:
 
 set_property PACKAGE_PIN W5 [get_ports clk]
 set_property IOSTANDARD LVCMOS33 [get_ports clk]
-create_clock -name external_clock -period 10.00 [get_ports clk]
 
 # LEDS:
 

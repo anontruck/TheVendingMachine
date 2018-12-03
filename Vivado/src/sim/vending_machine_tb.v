@@ -13,11 +13,12 @@ reg B3;
 reg C1;
 reg C2;
 reg C3;
-reg nickel = 1;
-reg dime = 1;
-reg quarter = 1;
-reg dollar = 1;
-reg five = 1;
+reg nickel;
+reg dime;
+reg quarter;
+reg fifty;
+reg dollar;
+reg five;
 reg cancelReset;
 reg coinsDisp;
 reg clk;
@@ -62,11 +63,12 @@ vending_machine #(0) machine(
     .C1(C1),
     .C2(C2),
     .C3(C3),
-    .nickel_n(nickel_n),
-    .dime_n(dime_n),
-    .quarter_n(quarter_n),
-    .dollar_n(dollar_n),
-    .five_n(five_n),
+    .nickel(nickel),
+    .dime(dime),
+    .quarter(quarter),
+    .fifty(fifty),
+    .dollar(dollar),
+    .five(five),
     .cancelReset(cancelReset),
     .coinsDisp(coinsDisp),
     .clk(clk),
@@ -107,7 +109,6 @@ initial begin
 
     $monitor("A1 %0b%0b A2 %0b%0b A3 %0b%0b\nB1 %0b%0b B2 %0b%0b B3 %0b%0b\nC1 %0b%0b C2 %0b%0b C3 %0b%0b\n\nA1 %0b A2 %0b A3 %0b B1 %0b B2 %0b B3 %0b C1 %0b C2 %0b C3 %0b", rLEDA1, gLEDA1, rLEDA2, gLEDA2, rLEDA3, gLEDA3, rLEDB1, gLEDB1, rLEDB2, gLEDB2, rLEDB3, gLEDB3, rLEDC1, gLEDC1, rLEDC2, gLEDC2, rLEDC3, gLEDC3, dLEDA1, dLEDA2, dLEDA3, dLEDB1, dLEDB2, dLEDB3, dLEDC1, dLEDC2, dLEDC3);
     
-    /*
     // check all prices
     #1 A1 = 1;
     $display("\nA1 = 1");
@@ -141,17 +142,21 @@ initial begin
     $display("C2 = 1");
     #1 C2 = 0;
     
-    #1 coinsDisp = 0;
-    $display("coinsDisp = 0");
+    /*
     #1 coinsDisp = 1;
+    $display("coinsDisp = 1");
+    #1 coinsDisp = 0;
+    //$display("coinsDisp = 0");
+    #1;
+    */
     
     #1 C3 = 1;
     $display("C3 = 1");
     #1 C3 = 0;
     
-    #1 nickel_n = 1;
-    $display("nickel_n = 1");
-    #1 nickel_n = 0;
+    #1 nickel = 1;
+        $display("nickel = 1");
+        #1 nickel = 0;
     
     #1 cancelReset = 1;
     $display("cancelReset = 1");
@@ -162,31 +167,31 @@ initial begin
     #1 A1 = 0;
     
     // insert coins
-    #1 nickel_n = 0;
-    $display("nickel_n = 0");
-    #1 nickel_n = 1;
+    #1 nickel = 1;
+    $display("nickel = 1");
+    #1 nickel = 0;
     
-    #1 nickel_n = 0;
-    $display("nickel_n = 0");
-    #1 nickel_n = 1;
-    
-    #1 A1 = 1;
-    $display("A1 = 1");
-    #1 A1 = 0;
-    
-    #1 nickel_n = 0;
-    $display("nickel_n = 0");
-    #1 nickel_n = 1;
-    
-    #1 dollar_n = 0;
-    $display("dollar_n = 0");
-    #1 dollar_n = 1;
+    #1 nickel = 1;
+    $display("nickel = 1");
+    #1 nickel = 0;
     
     #1 A1 = 1;
     $display("A1 = 1");
     #1 A1 = 0;
-    */
+    
+    #1 nickel = 1;
+    $display("nickel = 1");
+    #1 nickel = 0;
+    
+    #1 dollar = 1;
+        $display("dollar = 1");
+        #1 dollar = 0;
+        
+        #1 A1 = 1;
+            $display("A1 = 1");
+            #1 A1 = 0;
     
     #1000 $finish;
 end
+    
 endmodule

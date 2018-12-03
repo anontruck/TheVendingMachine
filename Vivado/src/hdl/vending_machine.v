@@ -10,11 +10,12 @@ module vending_machine(
     input wire C1,
     input wire C2,
     input wire C3,
-    input wire nickel_n,
-    input wire dime_n,
-    input wire quarter_n,
-    input wire dollar_n,
-    input wire five_n,
+    input wire nickel,
+    input wire dime,
+    input wire quarter,
+    input wire fifty,
+    input wire dollar,
+    input wire five,
     input wire cancelReset,
     input wire coinsDisp,  // button to show current change in coins
     input wire clk,
@@ -72,7 +73,7 @@ reg [8:0] totalMoney = 0;
 reg [8:0] change = 0;
 reg [8:0] coins = 0;   // integer value showing each coin amount
 
-reg [7:0] select = 8'b0;    // selected item code (A1, A2, A3, etc.)
+reg [7:0] select = 8'h0;    // selected item code (A1, A2, A3, etc.)
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -104,17 +105,22 @@ assign dLEDC1 = (select == 8'hc1) ? 1'b1 : 1'b0;
 assign dLEDC2 = (select == 8'hc2) ? 1'b1 : 1'b0;
 assign dLEDC3 = (select == 8'hc3) ? 1'b1 : 1'b0;
 
+reg [7:0] coinsDispTmpAN0;    // to hold 7SD value when pressing coinsDisp
+reg [7:0] coinsDispTmpAN1;
+reg [7:0] coinsDispTmpAN2;
+reg [7:0] coinsDispTmpAN3;
+
 // temporary registers for instantiated modules
 reg [13:0] num; // holds integer value to print (change or coins)
 reg decimal;    // 1 or 0 depending on if a decimal should be shown (num_to_7SD)
 reg negative;   // 1 or 0 depending on if a negative value will be shown (num_to_7SD)
 
-wire [7:0] tmpDispAN0;  // LSB
+wire [7:0] tmpDispAN0;
 wire [7:0] tmpDispAN1;
 wire [7:0] tmpDispAN2;
-wire [7:0] tmpDispAN3;  // MSB
+wire [7:0] tmpDispAN3;
 
-wire [13:0] tmpCoins = 14'b0;   // holder for change in coins (num_to_coins); 14 bits for decimal 9999
+wire [13:0] tmpCoins; // holder for change in coins (num_to_coins); 14 bits for decimal 9999
 
 num_to_7SD toDisp(.intNum(num), .decimal(decimal), .negative(negative), .sSegAN0(tmpDispAN0), .sSegAN1(tmpDispAN1), .sSegAN2(tmpDispAN2), .sSegAN3(tmpDispAN3));
 num_to_coins toCoins(.intNum(num), .value(tmpCoins));
@@ -154,18 +160,6 @@ end
 
 assign anx = en_an;
 assign value = valx;
-
-wire nickel;
-wire dime;
-wire quarter;
-wire dollar;
-wire five;
-
-debounce nickelSW(.sig_out(nickel), .button_n(nickel_n), .clk_100_MHz(clk));
-debounce dimeSW(.sig_out(dime), .button_n(dime_n), .clk_100_MHz(clk));
-debounce quarterSW(.sig_out(quarter), .button_n(quarter_n), .clk_100_MHz(clk));
-debounce dollarSW(.sig_out(dollar), .button_n(dollar_n), .clk_100_MHz(clk));
-debounce fiveSW(.sig_out(five), .button_n(five_n), .clk_100_MHz(clk));
 
 /*
 // DEBUG: emulate 4x7SD
@@ -239,140 +233,59 @@ always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
 end
 */
 
-always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge dollar or posedge five or posedge cancelReset or posedge coinsDisp) begin
+always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or posedge coinsDisp) begin
 
-    if (nickel || dime || quarter || dollar || five) begin
-    
-        decimal = 1;
-        negative = 0;
-    
-        if (nickel) begin
-        
-            if ((totalMoney + 5) > maxMoney) begin
-                
-                coins = coins + 1;
-            end
-            
-            else begin
-            
-                totalMoney = totalMoney + 5;
-                num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
-            end
-        end
-                
-        else if (dime) begin
-    
-            if ((totalMoney + 10) > maxMoney) begin
-
-                coins = coins + 10;
-            end
-                    
-            else begin
-                    
-                totalMoney = totalMoney + 10;
-                num = totalMoney;
-            end
-        end
-                
-        else if (quarter) begin
-    
-            if ((totalMoney + 25) > maxMoney) begin
-
-                coins = coins + 100;
-            end
-                    
-            else begin
-                    
-                totalMoney = totalMoney + 25;
-                num = totalMoney;
-            end
-        end
-                
-        else if (dollar) begin
-    
-            if ((totalMoney + 100) > maxMoney) begin
-
-                coins = coins + 1000;
-            end
-                    
-            else begin
-                    
-                totalMoney = totalMoney + 100;
-                num = totalMoney;
-            end
-        end
-                
-        else if (five) begin
-    
-            if ((totalMoney + 500) > maxMoney) begin
-
-                coins = coins + 5000;
-            end
-                    
-            else begin
-                    
-                totalMoney = totalMoney + 500;
-                num = totalMoney;
-            end
-        end
-        
-        dispAN0 = tmpDispAN0;
-        dispAN1 = tmpDispAN1;
-        dispAN2 = tmpDispAN2;
-        dispAN3 = tmpDispAN3;
-    end
-
-    else if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
+    if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
     
         decimal = 1;
         negative = 0;
     
         if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
         
-            if (A1) begin
-            
-                num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
-            end
-            
-            else if (A2) begin
-            
-                num = priceA2;
-            end
-            
-            else if (A3) begin
-            
-                num = priceA3;
-            end
-            
-            else if (B1) begin
-            
-                num = priceB1;
-            end
-            
-            else if (B2) begin
-            
-                num = priceB2;
-            end
-            
-            else if (B3) begin
-            
-                num = priceB3;
-            end
-            
-            else if (C1) begin
-            
-                num = priceC1;
-            end
-            
-            else if (C2) begin
-            
-                num = priceC2;
-            end
-            
-            else if (C3) begin
-            
-                num = priceC3;
-            end
+                if (A1) begin
+                
+                    num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
+                end
+                
+                else if (A2) begin
+                        
+                    num = priceA2;
+                end
+                
+                else if (A3) begin
+                                
+                    num = priceA3;
+                end
+                
+                else if (B1) begin
+                                        
+                    num = priceB1;
+                end
+                
+                else if (B2) begin
+                                                
+                    num = priceB2;
+                end
+                
+                else if (B3) begin
+                                                        
+                    num = priceB3;
+                end
+        
+                else if (C1) begin
+                                        
+                    num = priceC1;
+                end
+                
+                else if (C2) begin
+                                                
+                    num = priceC2;
+                end
+                
+                else if (C3) begin
+                                                        
+                    num = priceC3;
+                end
         end
         
         else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
@@ -520,6 +433,13 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                     num = priceC3 - totalMoney;
                 end
             end
+    
+            if (select != 8'h0) begin   // reset if selection was made successfully
+            
+                totalMoney = 0;
+                change = 0;
+                coins = 0;
+            end
         end
 
         //#1; // DEBUG
@@ -527,6 +447,132 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         dispAN1 = tmpDispAN1;
         dispAN2 = tmpDispAN2;
         dispAN3 = tmpDispAN3;
+    end
+
+    else if (nickel || dime || quarter || fifty || dollar || five) begin
+    
+        decimal = 1;
+        negative = 0;
+    
+        if (nickel) begin
+        
+            if ((totalMoney + 5) > maxMoney) begin
+                
+                num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
+                coins = coins + tmpCoins;
+            end
+            
+            else begin
+            
+                totalMoney = totalMoney + 5;
+                num = totalMoney;   // loads tmpDisp with total money inserted converted to 7SD format
+                //#1; // DEBUG
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
+            end
+        end
+                
+        else if (dime) begin
+    
+            if ((totalMoney + 10) > maxMoney) begin
+                    
+                num = 10;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 10;
+                num = totalMoney;
+                //#1; // DEBUG
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
+            end
+        end
+                
+        else if (quarter) begin
+    
+            if ((totalMoney + 25) > maxMoney) begin
+                    
+                num = 25;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 25;
+                num = totalMoney;
+                //#1; // DEBUG
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
+            end
+        end
+                
+        else if (fifty) begin
+    
+            if ((totalMoney + 50) > maxMoney) begin
+                    
+                num = 50;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 50;
+                num = totalMoney;
+                //#1; // DEBUG
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
+            end
+        end
+                
+        else if (dollar) begin
+    
+            if ((totalMoney + 100) > maxMoney) begin
+                    
+                num = 100;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 100;
+                num = totalMoney;
+                //#1; // DEBUG
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
+            end
+        end
+                
+        else if (five) begin
+    
+            if ((totalMoney + 500) > maxMoney) begin
+                    
+                num = 500;
+                coins = coins + tmpCoins;
+            end
+                    
+            else begin
+                    
+                totalMoney = totalMoney + 500;
+                num = totalMoney;
+                //#1; // DEBUG
+                dispAN0 = tmpDispAN0;
+                dispAN1 = tmpDispAN1;
+                dispAN2 = tmpDispAN2;
+                dispAN3 = tmpDispAN3;
+            end
+        end
     end
 
     else if (cancelReset) begin
@@ -547,18 +593,22 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         totalMoney = 0; // reset
         change = 0;
         coins = 0;
-        select = 8'b0;
-        //#1; // DEBUG
-        dispAN0 = 8'b10000001;  // 0
-        dispAN1 = 8'b10000001;  // 0
-        dispAN2 = 8'b10000001;  // 0
-        dispAN3 = 8'b10000001;  // 0
+        select = 8'h0;
+        //#1;
+        dispAN0 = 8'b10000001;   // 0
+        dispAN1 = 8'b10000001;   // 0
+        dispAN2 = 8'b10000001;   // 0
+        dispAN3 = 8'b10000001;   // 0
     end
 
     else if (coinsDisp) begin 
     
         decimal = 0;
         negative = 0;
+        coinsDispTmpAN0 = dispAN0;  // save current 7SD to restore on negedge button press
+        coinsDispTmpAN1 = dispAN1;
+        coinsDispTmpAN2 = dispAN2;
+        coinsDispTmpAN3 = dispAN3;
         num = coins;    // loads tmpDisp with change in coins converted to 7SD format
         //#1; // DEBUG
         dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
