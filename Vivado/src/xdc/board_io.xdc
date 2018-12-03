@@ -1,52 +1,52 @@
 # SWITCHES:
 
-set_property PACKAGE_PIN R2 [get_ports A1]
-set_property IOSTANDARD LVCMOS33 [get_ports A1]
+set_property PACKAGE_PIN R2 [get_ports A1_n]
+set_property IOSTANDARD LVCMOS33 [get_ports A1_n]
 
-set_property PACKAGE_PIN T1 [get_ports A2]
-set_property IOSTANDARD LVCMOS33 [get_ports A2]
+set_property PACKAGE_PIN T1 [get_ports A2_n]
+set_property IOSTANDARD LVCMOS33 [get_ports A2_n]
 
-set_property PACKAGE_PIN U1 [get_ports A3]
-set_property IOSTANDARD LVCMOS33 [get_ports A3]
+set_property PACKAGE_PIN U1 [get_ports A3_n]
+set_property IOSTANDARD LVCMOS33 [get_ports A3_n]
 
-set_property PACKAGE_PIN W2 [get_ports B1]
-set_property IOSTANDARD LVCMOS33 [get_ports B1]
+set_property PACKAGE_PIN W2 [get_ports B1_n]
+set_property IOSTANDARD LVCMOS33 [get_ports B1_n]
 
-set_property PACKAGE_PIN R3 [get_ports B2]
-set_property IOSTANDARD LVCMOS33 [get_ports B2]
+set_property PACKAGE_PIN R3 [get_ports B2_n]
+set_property IOSTANDARD LVCMOS33 [get_ports B2_n]
 
-set_property PACKAGE_PIN T2 [get_ports B3]
-set_property IOSTANDARD LVCMOS33 [get_ports B3]
+set_property PACKAGE_PIN T2 [get_ports B3_n]
+set_property IOSTANDARD LVCMOS33 [get_ports B3_n]
 
-set_property PACKAGE_PIN T3 [get_ports C1]
-set_property IOSTANDARD LVCMOS33 [get_ports C1]
+set_property PACKAGE_PIN T3 [get_ports C1_n]
+set_property IOSTANDARD LVCMOS33 [get_ports C1_n]
 
-set_property PACKAGE_PIN V2 [get_ports C2]
-set_property IOSTANDARD LVCMOS33 [get_ports C2]
+set_property PACKAGE_PIN V2 [get_ports C2_n]
+set_property IOSTANDARD LVCMOS33 [get_ports C2_n]
 
-set_property PACKAGE_PIN W13 [get_ports C3]
-set_property IOSTANDARD LVCMOS33 [get_ports C3]
+set_property PACKAGE_PIN W13 [get_ports C3_n]
+set_property IOSTANDARD LVCMOS33 [get_ports C3_n]
 
-set_property PACKAGE_PIN W14 [get_ports nickel]
-set_property IOSTANDARD LVCMOS33 [get_ports nickel]
+set_property PACKAGE_PIN W14 [get_ports nickel_n]
+set_property IOSTANDARD LVCMOS33 [get_ports nickel_n]
 
-set_property PACKAGE_PIN V15 [get_ports dime]
-set_property IOSTANDARD LVCMOS33 [get_ports dime]
+set_property PACKAGE_PIN V15 [get_ports dime_n]
+set_property IOSTANDARD LVCMOS33 [get_ports dime_n]
 
-set_property PACKAGE_PIN W15 [get_ports quarter]
-set_property IOSTANDARD LVCMOS33 [get_ports quarter]
+set_property PACKAGE_PIN W15 [get_ports quarter_n]
+set_property IOSTANDARD LVCMOS33 [get_ports quarter_n]
 
-set_property PACKAGE_PIN W17 [get_ports fifty]
-set_property IOSTANDARD LVCMOS33 [get_ports fifty]
+set_property PACKAGE_PIN W17 [get_ports fifty_n]
+set_property IOSTANDARD LVCMOS33 [get_ports fifty_n]
 
-set_property PACKAGE_PIN W16 [get_ports dollar]
-set_property IOSTANDARD LVCMOS33 [get_ports dollar]
+set_property PACKAGE_PIN W16 [get_ports dollar_n]
+set_property IOSTANDARD LVCMOS33 [get_ports dollar_n]
 
-set_property PACKAGE_PIN V16 [get_ports five]
-set_property IOSTANDARD LVCMOS33 [get_ports five]
+set_property PACKAGE_PIN V16 [get_ports five_n]
+set_property IOSTANDARD LVCMOS33 [get_ports five_n]
 
-set_property PACKAGE_PIN V17 [get_ports cancelReset]
-set_property IOSTANDARD LVCMOS33 [get_ports cancelReset]
+set_property PACKAGE_PIN V17 [get_ports cancelReset_n]
+set_property IOSTANDARD LVCMOS33 [get_ports cancelReset_n]
 
 # BUTTONS:
 

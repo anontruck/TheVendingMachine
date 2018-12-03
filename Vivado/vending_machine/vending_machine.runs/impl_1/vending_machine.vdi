@@ -2,8 +2,8 @@
 # Vivado v2018.2 (64-bit)
 # SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
 # IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
-# Start of session at: Sun Dec  2 15:28:10 2018
-# Process ID: 19588
+# Start of session at: Sun Dec  2 16:30:37 2018
+# Process ID: 24470
 # Current directory: /home/yellowsnow4free/Documents/GitHub/TheVendingMachine/Vivado/vending_machine/vending_machine.runs/impl_1
 # Command line: vivado -log vending_machine.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source vending_machine.tcl -notrace
 # Log file: /home/yellowsnow4free/Documents/GitHub/TheVendingMachine/Vivado/vending_machine/vending_machine.runs/impl_1/vending_machine.vdi
@@ -13,7 +13,3 @@ source vending_machine.tcl -notrace
 Command: link_design -top vending_machine -part xc7a35tcpg236-1
 Design is defaulting to srcset: sources_1
 Design is defaulting to constrset: constrs_1
-INFO: [Netlist 29-17] Analyzing 528 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
-INFO: [Project 1-479] Netlist was created with Vivado 2018.2
-INFO: [Device 21-403] Loading part xc7a35tcpg236-1

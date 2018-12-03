@@ -1,22 +1,22 @@
 `timescale 1ns / 1ps
 
 module vending_machine(
-    input wire A1,
-    input wire A2,
-    input wire A3,
-    input wire B1,
-    input wire B2,
-    input wire B3,
-    input wire C1,
-    input wire C2,
-    input wire C3,
-    input wire nickel,
-    input wire dime,
-    input wire quarter,
-    input wire fifty,
-    input wire dollar,
-    input wire five,
-    input wire cancelReset,
+    input wire A1_n,
+    input wire A2_n,
+    input wire A3_n,
+    input wire B1_n,
+    input wire B2_n,
+    input wire B3_n,
+    input wire C1_n,
+    input wire C2_n,
+    input wire C3_n,
+    input wire nickel_n,
+    input wire dime_n,
+    input wire quarter_n,
+    input wire fifty_n,
+    input wire dollar_n,
+    input wire five_n,
+    input wire cancelReset_n,
     input wire coinsDisp_n,  // button to show current change in coins
     input wire clk,
     output wire gLEDA1, // green LED for A1 - means inserted $ >= A1 price
@@ -53,27 +53,52 @@ module vending_machine(
 reg [7:0] valx;
 reg [3:0] en_an;
 
-reg [7:0] dispAN0 = 8'b10000001;    // LSB
-reg [7:0] dispAN1 = 8'b10000001;
-reg [7:0] dispAN2 = 8'b10000001;
-reg [7:0] dispAN3 = 8'b10000001;    // MSB
+reg [7:0] dispAN0;// = 8'b10000001;    // LSB
+reg [7:0] dispAN1;// = 8'b10000001;
+reg [7:0] dispAN2;// = 8'b10000001;
+reg [7:0] dispAN3;// = 8'b10000001;    // MSB
 
-reg [8:0] priceA1 = 100;
-reg [8:0] priceA2 = 0;
-reg [8:0] priceA3 = 125;
-reg [8:0] priceB1 = 175;
-reg [8:0] priceB2 = 225;
-reg [8:0] priceB3 = 250;
-reg [8:0] priceC1 = 100;
-reg [8:0] priceC2 = 325;
-reg [8:0] priceC3 = 375;
+reg [8:0] priceA1;// = 100;
+reg [8:0] priceA2;// = 0;
+reg [8:0] priceA3;// = 125;
+reg [8:0] priceB1;// = 175;
+reg [8:0] priceB2;// = 225;
+reg [8:0] priceB3;// = 250;
+reg [8:0] priceC1;// = 100;
+reg [8:0] priceC2;// = 325;
+reg [8:0] priceC3;// = 375;
 
-reg [8:0] maxMoney = 500;
-reg [8:0] totalMoney = 0;
-reg [8:0] change = 0;
-reg [8:0] coins = 0;   // integer value showing each coin amount
+reg [8:0] maxMoney;// = 500;
+reg [8:0] totalMoney;// = 0;
+reg [8:0] change;// = 0;
+reg [8:0] coins;// = 0;   // integer value showing each coin amount
 
-reg [7:0] select = 8'h0;    // selected item code (A1, A2, A3, etc.)
+reg [7:0] select;// = 8'h0;    // selected item code (A1, A2, A3, etc.)
+
+initial begin
+
+    dispAN0 = 8'b10000001;    // LSB
+    dispAN1 = 8'b10000001;
+    dispAN2 = 8'b10000001;
+    dispAN3 = 8'b10000001;    // MSB
+
+    priceA1 = 100;
+    priceA2 = 0;
+    priceA3 = 125;
+    priceB1 = 175;
+    priceB2 = 225;
+    priceB3 = 250;
+    priceC1 = 100;
+    priceC2 = 325;
+    priceC3 = 375;
+
+    maxMoney = 500;
+    totalMoney = 0;
+    change = 0;
+    coins = 0;   // integer value showing each coin amount
+
+    select = 8'h0;    // selected item code (A1, A2, A3, etc.)
+end
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -156,7 +181,40 @@ end
 assign anx = en_an;
 assign value = valx;
 
+wire A1;
+wire A2;
+wire A3;
+wire B1;
+wire B2;
+wire B3;
+wire C1;
+wire C2;
+wire C3;
+wire nickel;
+wire dime;
+wire quarter;
+wire fifty;
+wire dollar;
+wire five;
+wire cancelReset;
 wire coinsDisp;
+
+debounce swA1(.sig_out(A1), .button_n(A1_n), .clk_100_MHz(clk));
+debounce swA2(.sig_out(A2), .button_n(A2_n), .clk_100_MHz(clk));
+debounce swA3(.sig_out(A3), .button_n(A3_n), .clk_100_MHz(clk));
+debounce swB1(.sig_out(B1), .button_n(B1_n), .clk_100_MHz(clk));
+debounce swB2(.sig_out(B2), .button_n(B2_n), .clk_100_MHz(clk));
+debounce swB3(.sig_out(B3), .button_n(B3_n), .clk_100_MHz(clk));
+debounce swC1(.sig_out(C1), .button_n(C1_n), .clk_100_MHz(clk));
+debounce swC2(.sig_out(C2), .button_n(C2_n), .clk_100_MHz(clk));
+debounce swC3(.sig_out(C3), .button_n(C3_n), .clk_100_MHz(clk));
+debounce nickelSW(.sig_out(nickel), .button_n(nickel_n), .clk_100_MHz(clk));
+debounce dimeSW(.sig_out(dime), .button_n(dime_n), .clk_100_MHz(clk));
+debounce quarterSW(.sig_out(quarter), .button_n(quarter_n), .clk_100_MHz(clk));
+debounce fiftySW(.sig_out(fifty), .button_n(fifty_n), .clk_100_MHz(clk));
+debounce dollarSW(.sig_out(dollar), .button_n(dollar_n), .clk_100_MHz(clk));
+debounce fiveSW(.sig_out(five), .button_n(five_n), .clk_100_MHz(clk));
+debounce cancelResetSW(.sig_out(cancelReset), .button_n(cancelReset_n), .clk_100_MHz(clk));
 debounce coinsDispSW(.sig_out(coinsDisp), .button_n(coinsDisp_n), .clk_100_MHz(clk));
 
 /*
@@ -233,93 +291,95 @@ end
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or negedge coinsDisp) begin
 
-    /*
-    if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
+    if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3 && (totalMoney == 0)) begin    // $ hasn't been inserted, so user is checking the price of the item
     
         decimal = 1;
         negative = 0;
     
-        if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
+        if (A1) begin
         
-                if (A1) begin
-                
-                    num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
-                end
-                
-                else if (A2) begin
-                        
-                    num = priceA2;
-                end
-                
-                else if (A3) begin
-                                
-                    num = priceA3;
-                end
-                
-                else if (B1) begin
-                                        
-                    num = priceB1;
-                end
-                
-                else if (B2) begin
-                                                
-                    num = priceB2;
-                end
-                
-                else if (B3) begin
-                                                        
-                    num = priceB3;
-                end
-        
-                else if (C1) begin
-                                        
-                    num = priceC1;
-                end
-                
-                else if (C2) begin
-                                                
-                    num = priceC2;
-                end
-                
-                else if (C3) begin
-                                                        
-                    num = priceC3;
-                end
+            num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
         end
         
-        else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
+        else if (A2) begin
+        
+            num = priceA2;
+        end
+        
+        else if (A3) begin
+        
+            num = priceA3;
+        end
+        
+        else if (B1) begin
+        
+            num = priceB1;
+        end
+        
+        else if (B2) begin
+        
+            num = priceB2;
+        end
+        
+        else if (B3) begin
+        
+            num = priceB3;
+        end
+        
+        else if (C1) begin
+        
+            num = priceC1;
+        end
+        
+        else if (C2) begin
+        
+            num = priceC2;
+        end
+        
+        else if (C3) begin
+        
+            num = priceC3;
+        end
+                
+        dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
+        dispAN1 = tmpDispAN1;
+        dispAN2 = tmpDispAN2;
+        dispAN3 = tmpDispAN3;
+    end
+        
+    else if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3 && (totalMoney > 0)) begin // $ has been inserted, and user is selecting item
     
-            if (A1) begin
+        if (A1) begin
+        
+            if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
             
-                if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
-                
-                    change = totalMoney - priceA1;
-                    num = change;   // loads tmpDisp with change; will print when display = tmpDisp
-                    select = 8'ha1;
-                end
-                
-                else begin
-                
-                    negative = 1;
-                    num = priceA1 - totalMoney; // loads tmpDisp with required change; will print when display = tmpDisp
-                end
+                change = totalMoney - priceA1;
+                num = change;   // loads tmpDisp with change; will print when display = tmpDisp
+                select = 8'ha1;
             end
             
-            else if (A2) begin
-                    
-                if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
-                
-                    change = totalMoney - priceA2;
-                    num = change;
-                    select = 8'ha2;
-                end
-                        
-                else begin
-                        
-                    negative = 1;
-                    num = priceA2 - totalMoney;
-                end
+            else begin
+            
+                negative = 1;
+                num = priceA1 - totalMoney; // loads tmpDisp with required change; will print when display = tmpDisp
             end
+        end
+        
+        else if (A2) begin
+        
+            if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
+            
+                change = totalMoney - priceA2;
+                num = change;
+                select = 8'ha2;
+            end
+            
+            else begin
+            
+                negative = 1;
+                num = priceA2 - totalMoney;
+            end
+        end
             
             else if (A3) begin
                             
@@ -439,19 +499,15 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                 change = 0;
                 coins = 0;
             end
+            
+            dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
+                    dispAN1 = tmpDispAN1;
+                    dispAN2 = tmpDispAN2;
+                    dispAN3 = tmpDispAN3;
     
         end
 
-        //#1; // DEBUG
-        dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
-        dispAN1 = tmpDispAN1;
-        dispAN2 = tmpDispAN2;
-        dispAN3 = tmpDispAN3;
-    end
-    */
-
-    if (nickel || dime || quarter || fifty || dollar || five) begin
-    //else if (nickel || dime || quarter || fifty || dollar || five) begin
+    else if (nickel || dime || quarter || fifty || dollar || five) begin
     
         decimal = 1;
         negative = 0;
@@ -575,221 +631,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
                 dispAN3 = tmpDispAN3;
             end
         end
-    end
-
-    else if (A1 || A2 || A3 || B1 || B2 || B3 || C1 || C2 || C3) begin
-    
-        decimal = 1;
-        negative = 0;
-    
-        if (totalMoney == 0) begin // $ hasn't been inserted, so user is checking the price of the item
-        
-                if (A1) begin
-                
-                    num = priceA1;  // loads tmpDisp with priceA1; will print when display = tmpDisp
-                end
-                
-                else if (A2) begin
-                        
-                    num = priceA2;
-                end
-                
-                else if (A3) begin
-                                
-                    num = priceA3;
-                end
-                
-                else if (B1) begin
-                                        
-                    num = priceB1;
-                end
-                
-                else if (B2) begin
-                                                
-                    num = priceB2;
-                end
-                
-                else if (B3) begin
-                                                        
-                    num = priceB3;
-                end
-        
-                else if (C1) begin
-                                        
-                    num = priceC1;
-                end
-                
-                else if (C2) begin
-                                                
-                    num = priceC2;
-                end
-                
-                else if (C3) begin
-                                                        
-                    num = priceC3;
-                end
-        end
-        
-        else if (totalMoney > 0) begin // $ has been inserted, and user is selecting item
-    
-            if (A1) begin
-            
-                if ((totalMoney >= priceA1) && (priceA1 != 1'b0)) begin
-                
-                    change = totalMoney - priceA1;
-                    num = change;   // loads tmpDisp with change; will print when display = tmpDisp
-                    select = 8'ha1;
-                end
-                
-                else begin
-                
-                    negative = 1;
-                    num = priceA1 - totalMoney; // loads tmpDisp with required change; will print when display = tmpDisp
-                end
-            end
-            
-            else if (A2) begin
-                    
-                if ((totalMoney >= priceA2) && (priceA2 != 1'b0)) begin
-                
-                    change = totalMoney - priceA2;
-                    num = change;
-                    select = 8'ha2;
-                end
-                        
-                else begin
-                        
-                    negative = 1;
-                    num = priceA2 - totalMoney;
-                end
-            end
-            
-            else if (A3) begin
-                            
-                if ((totalMoney >= priceA3) && (priceA3 != 1'b0)) begin
-            
-                    change = totalMoney - priceA3;
-                    num = change;
-                    select = 8'ha3;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceA3 - totalMoney;
-                end
-            end
-            
-            else if (B1) begin
-                                    
-                if ((totalMoney >= priceB1) && (priceB1 != 1'b0)) begin
-            
-                    change = totalMoney - priceB1;
-                    num = change;
-                    select = 8'hb1;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceB1 - totalMoney;
-                end
-            end
-            
-            else if (B2) begin
-                                            
-                if ((totalMoney >= priceB2) && (priceB2 != 1'b0)) begin
-            
-                    change = totalMoney - priceB2;
-                    num = change;
-                    select = 8'hb2;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceB2 - totalMoney;
-                end
-            end
-            
-            else if (B3) begin
-                                                    
-                if ((totalMoney >= priceB3) && (priceB3 != 1'b0)) begin
-            
-                    change = totalMoney - priceB3;
-                    num = change;
-                    select = 8'hb3;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceB3 - totalMoney;
-                end
-            end
-    
-            else if (C1) begin
-                                    
-                if ((totalMoney >= priceC1) && (priceC1 != 1'b0)) begin
-            
-                    change = totalMoney - priceC1;
-                    num = change;
-                    select = 8'hc1;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceC1 - totalMoney;
-                end
-            end
-            
-            else if (C2) begin
-                                            
-                if ((totalMoney >= priceC2) && (priceC2 != 1'b0)) begin
-            
-                    change = totalMoney - priceC2;
-                    num = change;
-                    select = 8'hc2;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceC2 - totalMoney;
-                end
-            end
-            
-            else if (C3) begin
-                                                    
-                if ((totalMoney >= priceC3) && (priceC3 != 1'b0)) begin
-            
-                    change = totalMoney - priceC3;
-                    num = change;
-                    select = 8'hc3;
-                end
-            
-                else begin
-            
-                    negative = 1;
-                    num = priceC3 - totalMoney;
-                end
-            end
-    
-            if (select != 8'h0) begin   // reset if selection was made successfully
-            
-                totalMoney = 0;
-                change = 0;
-                coins = 0;
-            end
-    
-        end
-
-        //#1; // DEBUG
-        dispAN0 = tmpDispAN0;   // shows price or change on 7SD, depending on which value was assigned to num above
-        dispAN1 = tmpDispAN1;
-        dispAN2 = tmpDispAN2;
-        dispAN3 = tmpDispAN3;
     end
 
     else if (cancelReset) begin
