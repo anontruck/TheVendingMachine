@@ -27,31 +27,28 @@ set_property IOSTANDARD LVCMOS33 [get_ports C2_n]
 set_property PACKAGE_PIN W13 [get_ports C3_n]
 set_property IOSTANDARD LVCMOS33 [get_ports C3_n]
 
-set_property PACKAGE_PIN W14 [get_ports nickel_n]
-set_property IOSTANDARD LVCMOS33 [get_ports nickel_n]
+set_property PACKAGE_PIN V16 [get_ports cancelReset]
+set_property IOSTANDARD LVCMOS33 [get_ports cancelReset]
 
-set_property PACKAGE_PIN V15 [get_ports dime_n]
-set_property IOSTANDARD LVCMOS33 [get_ports dime_n]
-
-set_property PACKAGE_PIN W15 [get_ports quarter_n]
-set_property IOSTANDARD LVCMOS33 [get_ports quarter_n]
-
-set_property PACKAGE_PIN W17 [get_ports fifty_n]
-set_property IOSTANDARD LVCMOS33 [get_ports fifty_n]
-
-set_property PACKAGE_PIN W16 [get_ports dollar_n]
-set_property IOSTANDARD LVCMOS33 [get_ports dollar_n]
-
-set_property PACKAGE_PIN V16 [get_ports five_n]
-set_property IOSTANDARD LVCMOS33 [get_ports five_n]
-
-set_property PACKAGE_PIN V17 [get_ports cancelReset_n]
-set_property IOSTANDARD LVCMOS33 [get_ports cancelReset_n]
+set_property PACKAGE_PIN V17 [get_ports coinsDisp]
+set_property IOSTANDARD LVCMOS33 [get_ports coinsDisp]
 
 # BUTTONS:
 
-set_property PACKAGE_PIN U18 [get_ports coinsDisp_n]
-set_property IOSTANDARD LVCMOS33 [get_ports coinsDisp_n]
+set_property PACKAGE_PIN T18 [get_ports nickel_n]
+set_property IOSTANDARD LVCMOS33 [get_ports nickel_n]
+
+set_property PACKAGE_PIN T17 [get_ports dime_n]
+set_property IOSTANDARD LVCMOS33 [get_ports dime_n]
+
+set_property PACKAGE_PIN U17 [get_ports quarter_n]
+set_property IOSTANDARD LVCMOS33 [get_ports quarter_n]
+
+set_property PACKAGE_PIN W19 [get_ports dollar_n]
+set_property IOSTANDARD LVCMOS33 [get_ports dollar_n]
+
+set_property PACKAGE_PIN U18 [get_ports five_n]
+set_property IOSTANDARD LVCMOS33 [get_ports five_n]
 
 # CLK:
 
