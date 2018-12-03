@@ -10,11 +10,11 @@ module vending_machine(
     input wire C1,
     input wire C2,
     input wire C3,
-    input wire nickel,
-    input wire dime,
-    input wire quarter,
-    input wire dollar,
-    input wire five,
+    input wire nickel_n,
+    input wire dime_n,
+    input wire quarter_n,
+    input wire dollar_n,
+    input wire five_n,
     input wire cancelReset,
     input wire coinsDisp,  // button to show current change in coins
     input wire clk,
@@ -155,7 +155,6 @@ end
 assign anx = en_an;
 assign value = valx;
 
-/*
 wire nickel;
 wire dime;
 wire quarter;
@@ -167,7 +166,6 @@ debounce dimeSW(.sig_out(dime), .button_n(dime_n), .clk_100_MHz(clk));
 debounce quarterSW(.sig_out(quarter), .button_n(quarter_n), .clk_100_MHz(clk));
 debounce dollarSW(.sig_out(dollar), .button_n(dollar_n), .clk_100_MHz(clk));
 debounce fiveSW(.sig_out(five), .button_n(five_n), .clk_100_MHz(clk));
-*/
 
 /*
 // DEBUG: emulate 4x7SD
@@ -551,10 +549,10 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         coins = 0;
         select = 8'b0;
         //#1; // DEBUG
-        dispAN0 = 8'b10000001;   // 0
-        dispAN1 = 8'b10000001;   // 0
-        dispAN2 = 8'b10000001;   // 0
-        dispAN3 = 8'b10000001;   // 0
+        dispAN0 = 8'b10000001;  // 0
+        dispAN1 = 8'b10000001;  // 0
+        dispAN2 = 8'b10000001;  // 0
+        dispAN3 = 8'b10000001;  // 0
     end
 
     else if (coinsDisp) begin 
