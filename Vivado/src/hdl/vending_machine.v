@@ -73,7 +73,7 @@ reg [8:0] totalMoney = 0;
 reg [8:0] change = 0;
 reg [8:0] coins = 0;   // integer value showing each coin amount
 
-reg [7:0] select = 8'h0;    // selected item code (A1, A2, A3, etc.)
+reg [7:0] select = 8'b0;    // selected item code (A1, A2, A3, etc.)
 
 assign gLEDA1 = ((totalMoney >= priceA1) && (priceA1 != 0)) ? 1'b1 : 1'b0;
 assign gLEDA2 = ((totalMoney >= priceA2) && (priceA2 != 0)) ? 1'b1 : 1'b0;
@@ -576,21 +576,26 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
         decimal = 1;
         negative = 0;
-    
+
+	/*
+	// change case: coins inserted, no selection made, return change in coins
+	// change case: coins inserted, selection made, return change in coins
+
         if (change > 0) begin
     
             num = change;   // loads tmpDisp with change in 7SD decimal format
         end
         
-        else if (totalMoney > 0) begin
+        else if ((totalMoney > 0) && (select == 8'b0)) begin	// return inserted $
         
             num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
         end
+	*/
 
         totalMoney = 0; // reset
         change = 0;
         coins = 0;
-        select = 8'h0;
+        select = 8'b0;
         #1; // DEBUG
         dispAN0 = 8'b10000001;   // 0
         dispAN1 = 8'b10000001;   // 0
@@ -602,8 +607,24 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
 
         decimal = 0;
         negative = 0;
-        num = coins;    // loads tmpDisp with change in coins converted to 7SD format
-        #5; // DEBUG
+
+	if (coins != 0) begin
+
+		num = coins;
+	end
+
+	if ((totalMoney > 0) && (select == 8'b0)) begin
+
+		num = totalMoney;
+	end
+
+	else if (change > 0) begin
+
+		num = change;
+	end
+
+        //num = coins;    // loads tmpDisp with change in coins converted to 7SD format
+        #1; // DEBUG
         dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
         dispAN1 = tmpDispAN1;
         dispAN2 = tmpDispAN2;
