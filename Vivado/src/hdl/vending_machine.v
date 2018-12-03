@@ -161,7 +161,6 @@ end
 assign anx = en_an;
 assign value = valx;
 
-/*
 // DEBUG: emulate 4x7SD
 always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
 
@@ -231,7 +230,6 @@ always @(dispAN0 or dispAN1 or dispAN2 or dispAN3) begin
         8'b00100001 : $write("9\n");   // 9
     endcase
 end
-*/
 
 always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or posedge B3 or posedge C1 or posedge C2 or posedge C3 or posedge nickel or posedge dime or posedge quarter or posedge fifty or posedge dollar or posedge five or posedge cancelReset or posedge coinsDisp) begin
 
