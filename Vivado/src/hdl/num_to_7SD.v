@@ -113,7 +113,5 @@ always @(*) begin
         dispAN2 = 8'b01111111;
         dispAN3 = 8'b01111111;
     end
-    
 end
-
 endmodule

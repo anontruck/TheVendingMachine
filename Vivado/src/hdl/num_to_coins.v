@@ -25,5 +25,4 @@ always @(*) begin
     
     coins = (dollars * 1000) + (quarters * 100) + (dimes * 10) + nickels;
 end
-
 endmodule

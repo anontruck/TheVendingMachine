@@ -448,9 +448,7 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
         if (nickel) begin
         
             if ((totalMoney + 5) > maxMoney) begin
-                
-                //num = 5;    // loads tmpCoins with overflow change converted to proper coin on 7SD
-                //coins = coins + tmpCoins;
+
                 coins = coins + 1;
             end
             
@@ -470,8 +468,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 10) > maxMoney) begin
                     
-                //num = 10;
-                //coins = coins + tmpCoins;
                 coins = coins + 10;
             end
                     
@@ -491,8 +487,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 25) > maxMoney) begin
                     
-                //num = 25;
-                //coins = coins + tmpCoins;
                 coins = coins + 100;
             end
                     
@@ -512,8 +506,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 50) > maxMoney) begin
                     
-                //num = 50;
-                //coins = coins + tmpCoins;
                 coins = coins + 200;
             end
                     
@@ -533,8 +525,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 100) > maxMoney) begin
                     
-                //num = 100;
-                //coins = coins + tmpCoins;
                 coins = coins + 1000;
             end
                     
@@ -554,8 +544,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
             if ((totalMoney + 500) > maxMoney) begin
                     
-                //num = 500;
-                //coins = coins + tmpCoins;
                 coins = coins + 5000;
             end
                     
@@ -576,21 +564,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
     
         decimal = 1;
         negative = 0;
-
-	/*
-	// change case: coins inserted, no selection made, return change in coins
-	// change case: coins inserted, selection made, return change in coins
-
-        if (change > 0) begin
-    
-            num = change;   // loads tmpDisp with change in 7SD decimal format
-        end
-        
-        else if ((totalMoney > 0) && (select == 8'b0)) begin	// return inserted $
-        
-            num = totalMoney;   // loads tmpDisp with total money inserted in 7SD decimal format
-        end
-	*/
 
         totalMoney = 0; // reset
         change = 0;
@@ -623,7 +596,6 @@ always @(posedge A1 or posedge A2 or posedge A3 or posedge B1 or posedge B2 or p
 		num = change;
 	end
 
-        //num = coins;    // loads tmpDisp with change in coins converted to 7SD format
         #1; // DEBUG
         dispAN0 = tmpDispAN0;   // displays change in coins in 7SD format
         dispAN1 = tmpDispAN1;
